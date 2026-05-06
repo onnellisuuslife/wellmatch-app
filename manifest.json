@@ -1,0 +1,27 @@
+{
+  "name": "WellMatch — 専門家マッチング",
+  "short_name": "WellMatch",
+  "description": "心・体・お金・教育——あなたの人生の悩みに寄り添う専門家マッチングアプリ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1A0F",
+  "theme_color": "#1B4332",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "medical"],
+  "lang": "ja",
+  "dir": "ltr"
+}
