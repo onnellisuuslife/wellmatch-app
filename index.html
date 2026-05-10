@@ -385,10 +385,16 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .tdot:nth-child(2){animation-delay:.2s;}
 .tdot:nth-child(3){animation-delay:.4s;}
 @keyframes typAnim{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
-.inp-area{
-  padding:11px 14px;padding-bottom:calc(11px + var(--safe-b));
-  background:rgba(5,14,9,.9);border-top:1px solid rgba(255,255,255,.06);
+  .inp-area{
+  flex-shrink:0;
+  padding:11px 14px;
+  padding-bottom:calc(11px + var(--safe-b));
+  background:rgba(5,14,9,.95);
+  border-top:1px solid rgba(82,183,136,.15);
   display:flex;gap:8px;align-items:flex-end;
+  position:sticky;
+  bottom:0;
+  z-index:50;
 }
 .cinp{
   flex:1;padding:10px 14px;background:rgba(255,255,255,.06);
