@@ -23,12 +23,11 @@
   --sans:'Zen Kaku Gothic New',sans-serif;
   --serif:'Shippori Mincho',serif;
   --mono:'DM Mono',monospace;
-  --safe-b:env(safe-area-inset-bottom,20px);
+  --safe-b:env(safe-area-inset-bottom,0px);
   --safe-t:env(safe-area-inset-top,0px);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{height:-webkit-fill-available;}
-body{min-height:-webkit-fill-available;min-height:100vh;overflow:hidden;}
+html,body{height:100%;overflow:hidden;}
 body{
   font-family:var(--sans);background:var(--dark);color:var(--white);
   -webkit-font-smoothing:antialiased;overscroll-behavior:none;
@@ -322,7 +321,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
 /* ===================== COUNSEL ===================== */
 #s-counsel{padding:0;}
-.counsel-wrap{display:flex;flex-direction:column;height:100vh;max-height:-webkit-fill-available;}
+.counsel-wrap{display:flex;flex-direction:column;height:100%;}
 .chd{
   padding:calc(var(--safe-t) + 56px) 18px 10px;
   border-bottom:1px solid rgba(255,255,255,.06);
@@ -386,15 +385,9 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .tdot:nth-child(3){animation-delay:.4s;}
 @keyframes typAnim{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
 .inp-area{
-  flex-shrink:0;
-  padding:10px 14px;
-  padding-bottom:calc(10px + var(--safe-b));
-  background:rgba(5,14,9,.95);
-  border-top:1px solid rgba(82,183,136,.15);
+  padding:11px 14px;padding-bottom:calc(11px + var(--safe-b));
+  background:rgba(5,14,9,.9);border-top:1px solid rgba(255,255,255,.06);
   display:flex;gap:8px;align-items:flex-end;
-  position:sticky;
-  bottom:0;
-  z-index:50;
 }
 .cinp{
   flex:1;padding:10px 14px;background:rgba(255,255,255,.06);
@@ -585,8 +578,9 @@ select.inp{appearance:none;-webkit-appearance:none;}
       <span class="chip">🎓 家庭教師</span>
       <span class="chip">🥗 栄養士</span>
       <span class="chip">🌈 LGBTQ+</span>
-      <span class="chip">💄 美容アドバイザー</span>
-      <span class="chip">あらゆる分野に対応</span>
+      <span class="chip">💄 美容</span>
+      <span class="chip">👴 介護</span>
+      <span class="chip">12分野以上対応</span>
     </div>
     <div class="sp-btns">
       <button class="btn btn-p" onclick="go('auth')">はじめる →</button>
@@ -809,7 +803,7 @@ const experts=[
 ];
 
 const fieldCfg={
-  mental:{name:'🧠 メンタルヘルス相談',sys:'あなたはWellMatchの心理カウンセラーAIです。温かく共感的に、押しつけがましくなく日本語で対話してください。日本語で対話してください。共感を示した後、相手の状況を深く理解するための具体的な質問をしてください。アドバイスを求められたら、具体的で実践的なアドバイスを3つ程度提示してください。'},
+  mental:{name:'🧠 メンタルヘルス相談',sys:'あなたはWellMatchの心理カウンセラーAIです。温かく共感的に、押しつけがましくなく日本語で対話してください。まず相手の気持ちを受け止めてから、一つだけ質問してください。'},
   work:{name:'💼 仕事・キャリア相談',sys:'あなたはWellMatchのキャリアカウンセラーAIです。仕事・転職・職場の悩みに共感しながら、実践的なアドバイスを日本語で提供してください。'},
   love:{name:'💑 恋愛・人間関係相談',sys:'あなたはWellMatchの恋愛カウンセラーAIです。判断せず温かく寄り添いながら日本語で対話してください。'},
   body:{name:'💪 健康・ウェルネス相談',sys:'あなたはWellMatchのウェルネスカウンセラーAIです。医療行為は行わず、生活改善の視点から日本語でアドバイスしてください。'},
@@ -1059,7 +1053,7 @@ async function sendMsg(){
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,
           system:fieldCfg[S.field].sys,messages:S.history})
       });
       const data=await res.json();
