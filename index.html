@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0A1A0F">
 <meta name="description" content="心・体・お金・教育——あなたの人生の悩みに寄り添う専門家マッチング">
 <title>WellMatch</title>
-<link rel="manifest" href="/wellmatch-app/manifest.json">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700;900&family=Shippori+Mincho:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -532,7 +532,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 <div class="toast" id="toast"></div>
 
 <!-- DEMO BANNER -->
-<div class="demo-banner on" id="demoBanner">🎯 デモ版 — WellMatch β</div>
+
 
 <!-- TOPBAR -->
 <div class="topbar" id="topbar">
@@ -570,7 +570,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
     <div class="orb"><span style="font-size:58px">🌿</span></div>
     <h1 class="sp-logo">Well<span>Match</span></h1>
     <p class="sp-tag">専門家マッチング × ウェルネス</p>
-    <p class="sp-desc">心・体・お金・教育——あなたの人生の悩みに寄り添う専門家が、ここにいます。</p>
+    <p class="sp-desc">心・体・お金・教育・美容・介護——人生のあらゆる場面で、頼れる専門家が待っています。</p>
     <div class="chips">
       <span class="chip">🧠 心理カウンセラー</span>
       <span class="chip">💰 ライフプランナー</span>
@@ -584,7 +584,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
     </div>
     <div class="sp-btns">
       <button class="btn btn-p" onclick="go('auth')">はじめる →</button>
-      <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);" onclick="demoLogin()">デモで体験する</button>
+      <button class="btn btn-g" onclick="demoLogin()">ログインせずに体験する</button>
     </div>
     <p class="sp-ver">WellMatch v2.0 Demo — Coconala / 施設プレゼン用</p>
   </div>
@@ -869,7 +869,7 @@ function login(){
   const name=document.getElementById('lname').value.trim()||'ゲスト';
   S.user={name,type:'社会人'};initApp();
 }
-function demoLogin(){S.user={name:'明仁',type:'社会人'};initApp();}
+function demoLogin(){S.user={name:'ゲスト',type:'体験ユーザー'};initApp();}
 function logout(){
   S={...S,user:null,xp:0,level:1,questDone:new Set(),achEarned:new Set()};
   go('splash');
@@ -1004,7 +1004,7 @@ function startCounsel(field){
   const idx=Object.keys(fieldCfg).indexOf(field);
   document.querySelectorAll('.ftab')[idx]?.classList.add('active');
   document.getElementById('chatArea').innerHTML='';
-  document.getElementById('apiMod').classList.add('on');
+  addWelcome();
 }
 function switchField(field,el){
   S.field=field;S.history=[];
