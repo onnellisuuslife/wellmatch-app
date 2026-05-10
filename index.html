@@ -27,7 +27,8 @@
   --safe-t:env(safe-area-inset-top,0px);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
+html{height:-webkit-fill-available;}
+body{min-height:-webkit-fill-available;min-height:100vh;overflow:hidden;}
 body{
   font-family:var(--sans);background:var(--dark);color:var(--white);
   -webkit-font-smoothing:antialiased;overscroll-behavior:none;
