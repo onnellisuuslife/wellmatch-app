@@ -27,7 +27,8 @@
   --safe-t:env(safe-area-inset-top,0px);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
+html{height:-webkit-fill-available;}
+body{min-height:-webkit-fill-available;min-height:100vh;overflow:hidden;}
 body{
   font-family:var(--sans);background:var(--dark);color:var(--white);
   -webkit-font-smoothing:antialiased;overscroll-behavior:none;
@@ -321,7 +322,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
 /* ===================== COUNSEL ===================== */
 #s-counsel{padding:0;}
-.counsel-wrap{display:flex;flex-direction:column;height:100%;}
+.counsel-wrap{display:flex;flex-direction:column;height:100vh;max-height:-webkit-fill-available;}
 .chd{
   padding:calc(var(--safe-t) + 56px) 18px 10px;
   border-bottom:1px solid rgba(255,255,255,.06);
@@ -385,9 +386,15 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .tdot:nth-child(3){animation-delay:.4s;}
 @keyframes typAnim{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
 .inp-area{
-  padding:11px 14px;padding-bottom:calc(11px + var(--safe-b));
-  background:rgba(5,14,9,.9);border-top:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+  padding:10px 14px;
+  padding-bottom:calc(10px + var(--safe-b));
+  background:rgba(5,14,9,.95);
+  border-top:1px solid rgba(82,183,136,.15);
   display:flex;gap:8px;align-items:flex-end;
+  position:sticky;
+  bottom:0;
+  z-index:50;
 }
 .cinp{
   flex:1;padding:10px 14px;background:rgba(255,255,255,.06);
