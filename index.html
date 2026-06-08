@@ -1043,9 +1043,9 @@ async function sendMsg(){
     appendMsg('ai',resp);S.history.push({role:'assistant',content:resp});
   }else{
     try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
+      const res=await fetch('https://wellmatch-api.mia-rockenry.workers.dev',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
         body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,
           system:fieldCfg[S.field].sys,messages:S.history})
       });
