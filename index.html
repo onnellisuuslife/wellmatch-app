@@ -754,9 +754,8 @@ select.inp{appearance:none;-webkit-appearance:none;}
   <button class="mbtn2" onclick="go('counsel')">もっと話す 💬</button>
 </div>
 
-<script>
-
-  <div class="modal-ov" id="paywallMod">
+<!-- PAYWALL MODAL -->
+<div class="modal-ov" id="paywallMod">
   <div class="modal">
     <span class="m-ico">🌿</span>
     <div class="m-ttl">無料の相談回数を使い切ったよ</div>
@@ -766,6 +765,12 @@ select.inp{appearance:none;-webkit-appearance:none;}
     <button class="btn-skip" onclick="document.getElementById('paywallMod').classList.remove('on')">あとで決める</button>
   </div>
 </div>
+
+<script>  ← ここからJS
+
+<script>
+
+
 // ===== DATA =====
 const experts=[
   {id:1,name:'田中 美咲',role:'臨床心理士 / 公認心理師',emoji:'👩‍⚕️',cat:'mental',
