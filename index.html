@@ -755,6 +755,17 @@ select.inp{appearance:none;-webkit-appearance:none;}
 </div>
 
 <script>
+
+  <div class="modal-ov" id="paywallMod">
+  <div class="modal">
+    <span class="m-ico">🌿</span>
+    <div class="m-ttl">無料の相談回数を使い切ったよ</div>
+    <div class="m-desc">ハルともっと話したいな🌿<br>続けるプランを選んでね。</div>
+    <button class="btn btn-p" onclick="document.getElementById('paywallMod').classList.remove('on')">① 月額1,000円でハルと続ける</button>
+    <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="document.getElementById('paywallMod').classList.remove('on');go('experts')">② 専門家に直接相談する</button>
+    <button class="btn-skip" onclick="document.getElementById('paywallMod').classList.remove('on')">あとで決める</button>
+  </div>
+</div>
 // ===== DATA =====
 const experts=[
   {id:1,name:'田中 美咲',role:'臨床心理士 / 公認心理師',emoji:'👩‍⚕️',cat:'mental',
@@ -830,7 +841,7 @@ const allAch=[
 
 // ===== STATE =====
 let S={user:null,apiKey:'',demoMode:false,xp:0,level:1,streak:1,
-       field:'mental',msgCount:0,history:[],questDone:new Set(),achEarned:new Set()};
+       field:'mental',msgCount:0,history:[],questDone:new Set(),achEarned:new Set(),isPaid:false};
 
 // ===== SCREEN =====
 function go(id){
@@ -1034,6 +1045,7 @@ async function sendMsg(){
   appendMsg('user',text);
   S.history.push({role:'user',content:text});
   S.msgCount++;addXP(10);earnAch('first_talk');
+  if(S.msgCount>=5&&!S.isPaid){showPaywall();return;}
   completeQ('q1',50);recoverHP(S.field);
   showTyping();
   if(S.demoMode){
@@ -1099,6 +1111,10 @@ if('serviceWorker' in navigator){
       .then(()=>console.log('SW registered'))
       .catch(e=>console.log('SW error',e));
   });
+}
+
+  function showPaywall(){
+  document.getElementById('paywallMod').classList.add('on');
 }
 
 // iOS PWA install hint
