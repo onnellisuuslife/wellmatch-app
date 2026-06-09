@@ -577,7 +577,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
     </div>
     <div class="sp-btns">
       <button class="btn btn-p" onclick="go('auth')">はじめる →</button>
-      <button class="btn btn-g" onclick="demoLogin()">ログインせずに体験する</button>
+      <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);" onclick="demoLogin()">ログインせずに体験する</button>
     </div>
     <p class="sp-ver">WellMatch v2.0 Demo — Coconala / 施設プレゼン用</p>
   </div>
@@ -591,19 +591,15 @@ select.inp{appearance:none;-webkit-appearance:none;}
       <button class="atab active" onclick="switchAuth('register',this)">新規登録</button>
       <button class="atab" onclick="switchAuth('login',this)">ログイン</button>
     </div>
-    <div class="asec active" id="a-register">
-      <div style="margin-bottom:12px;"><label style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);display:block;margin-bottom:5px;">ニックネーム（匿名でOK）</label>
-        <input type="text" class="inp" id="rname" placeholder="例：あきひと、Taro" maxlength="20"></div>
-      <div style="margin-bottom:12px;"><label style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);display:block;margin-bottom:5px;">タイプ</label>
-        <select class="inp" id="rtype">
-          <option value="学生">🎒 学生・若者</option>
-          <option value="社会人">💼 社会人</option>
-          <option value="保護者">👨‍👩‍👧 保護者・親</option>
-          <option value="シニア">🌸 シニア・中高年</option>
-        </select></div>
-      <button class="btn btn-p" onclick="register()">登録して始める ✨</button>
-      <p class="auth-note">完全匿名・本名不要<br>いつでも退会可能</p>
-    </div>
+<div class="asec active" id="a-register">
+  <div style="margin-bottom:12px;">
+    <label style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);display:block;margin-bottom:5px;">ニックネーム（匿名でOK）</label>
+    <input type="text" class="inp" id="rname" placeholder="例：あきひと、Taro" maxlength="20">
+    <p id="rnameErr" style="color:#FF6B6B;font-size:11px;margin-top:-8px;margin-bottom:8px;display:none;">ニックネームを入力してください</p>
+  </div>
+  <button class="btn btn-p" onclick="register()">登録して始める ✨</button>
+  <p class="auth-note">完全匿名・本名不要<br>いつでも退会可能</p>
+</div>
     <div class="asec" id="a-login">
       <div style="margin-bottom:12px;"><label style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);display:block;margin-bottom:5px;">ニックネーム</label>
         <input type="text" class="inp" id="lname" placeholder="登録時のニックネーム"></div>
@@ -867,9 +863,13 @@ function switchAuth(tab,el){
   document.getElementById('a-'+tab).classList.add('active');
 }
 function register(){
-  const name=document.getElementById('rname').value.trim()||'ゲスト';
-  const type=document.getElementById('rtype').value;
-  S.user={name,type};initApp();
+  const name=document.getElementById('rname').value.trim();
+  if(!name){
+    document.getElementById('rnameErr').style.display='block';
+    return;
+  }
+  document.getElementById('rnameErr').style.display='none';
+  S.user={name,type:'ユーザー'};initApp();
 }
 function login(){
   const name=document.getElementById('lname').value.trim()||'ゲスト';
