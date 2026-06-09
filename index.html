@@ -853,7 +853,6 @@ function go(id){
   const ui=['home','experts','counsel','profile','match','lv'].includes(id);
   document.getElementById('topbar').classList.toggle('on',ui&&id!=='counsel');
   document.getElementById('bottomnav').classList.toggle('on',['home','experts','counsel','profile'].includes(id));
-  document.getElementById('demoBanner').classList.toggle('on',['home','experts','counsel','profile'].includes(id));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('nb-'+id)?.classList.add('active');
   if(id==='experts')renderExperts('all');
