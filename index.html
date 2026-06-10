@@ -56,10 +56,15 @@ body{
 
 /* SCREEN SYSTEM */
 .screen{
-  position:fixed;inset:0;z-index:1;
-  display:flex;flex-direction:column;
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
   overflow:hidden;
-  opacity:0;pointer-events:none;
+  opacity:0;
+  pointer-events:none;
   transition:opacity .3s ease,transform .3s ease;
   transform:translateY(12px);
 }
@@ -142,24 +147,72 @@ body{
 .inp::placeholder{color:rgba(255,255,255,.22);}
 select.inp{appearance:none;-webkit-appearance:none;}
 .btn{
-  width:100%;padding:13px;border:none;border-radius:50px;
-  font-family:var(--sans);font-size:14px;font-weight:700;
-  cursor:pointer;transition:all .2s;
+    height:58px;
+    font-size:17px;
+    border-radius:18px;
 }
-.btn-p{background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);box-shadow:0 4px 18px rgba(82,183,136,.3);}
-.btn-p:active{transform:scale(.98);}
+  .btn:nth-child(2){
+    margin-top:12px;
+}
+.btn-p{
+    background:linear-gradient(135deg,var(--g5),var(--t1));
+    color:var(--dark);
+    box-shadow:0 4px 18px rgba(82,183,136,.3);
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        filter .22s ease;
+}
+
+.btn-p:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 34px rgba(82,183,136,.28);
+    filter:brightness(1.05);
+}
+
+.btn-p:active{
+    transform:scale(.98);
+}
 .btn-skip{background:none;border:none;color:rgba(255,255,255,.3);font-size:12.5px;font-family:var(--sans);cursor:pointer;padding:9px;width:100%;margin-top:4px;}
 
 /* ===================== SPLASH ===================== */
-#s-splash{align-items:center;justify-content:center;text-align:center;padding:40px 22px;}
-.orb{
-  width:140px;height:140px;border-radius:50%;margin:0 auto 26px;
-  background:radial-gradient(circle at 35% 35%,var(--g5),var(--g3));
-  box-shadow:0 0 60px rgba(82,183,136,.35),0 0 100px rgba(82,183,136,.1);
-  display:flex;align-items:center;justify-content:center;
-  animation:orbPulse 4s ease-in-out infinite;
-  position:relative;
+#s-splash{
+    display:flex;
+    flex-direction:column;
+    height:100dvh;
+    overflow:hidden;
+}.orb{
+
+    width:120px;
+    height:120px;
+
+    margin-bottom:22px;
+
+    animation:orbFloat 5s ease-in-out infinite;
+
 }
+
+@keyframes orbFloat{
+
+0%{
+
+    transform:translateY(0px);
+
+}
+
+50%{
+
+    transform:translateY(-8px);
+
+}
+
+100%{
+
+    transform:translateY(0px);
+
+}
+}
+  
 .orb::before{
   content:'';position:absolute;inset:-6px;border-radius:50%;
   border:1px solid rgba(82,183,136,.25);
@@ -167,17 +220,84 @@ select.inp{appearance:none;-webkit-appearance:none;}
 }
 @keyframes orbPulse{0%,100%{box-shadow:0 0 60px rgba(82,183,136,.35),0 0 100px rgba(82,183,136,.1);}50%{box-shadow:0 0 90px rgba(82,183,136,.55),0 0 140px rgba(82,183,136,.2);transform:scale(1.03);}}
 @keyframes orbRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.sp-logo{font-family:var(--serif);font-size:38px;font-weight:700;margin-bottom:4px;}
-.sp-logo span{color:var(--g5);}
-.sp-tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--g6);margin-bottom:32px;}
-.sp-desc{font-size:14.5px;color:rgba(250,250,247,.6);line-height:1.75;margin-bottom:36px;max-width:290px;}
-.chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:36px;}
-.chip{
-  padding:5px 12px;border-radius:50px;font-size:10.5px;font-weight:600;
-  border:1px solid rgba(82,183,136,.25);background:rgba(82,183,136,.07);color:var(--g6);
+.sp-logo{
+
+    letter-spacing:-1.5px;
+
+    text-shadow:
+        0 4px 18px rgba(82,183,136,.18);
+
+}.sp-logo span{color:var(--g5);}
+  
+.sp-tag{
+    margin-bottom:28px;
+    font-size:13px;
+    color:#8FD8B7;
 }
-.sp-btns{width:100%;max-width:300px;display:flex;flex-direction:column;gap:9px;}
-.sp-ver{margin-top:20px;font:400 10px/1 var(--mono);color:rgba(255,255,255,.18);}
+  
+.sp-desc{
+    max-width:310px;
+    margin-bottom:30px;
+    font-size:15px;
+    line-height:1.9;
+    color:rgba(255,255,255,.72);
+}
+
+.orb{
+
+    position:relative;
+
+}
+
+.orb::before{
+
+    content:"";
+    position:absolute;
+    inset:-25px;
+    border-radius:50%;
+    background:radial-gradient(
+        rgba(82,183,136,.28),
+        transparent 70%
+    );
+    z-index:-1;
+    filter:blur(16px);
+}
+  
+.chips{
+    gap:8px;
+    margin-bottom:40px;
+}
+  
+  .chip{
+    padding:8px 14px;
+    font-size:12px;
+    border-radius:30px;
+}
+
+.splash-inner{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:
+        calc(32px + env(safe-area-inset-top))
+        24px
+        calc(18px + env(safe-area-inset-bottom));
+}
+  
+.sp-btns{
+    width:100%;
+    max-width:340px;
+    margin-top:auto;
+}
+  
+.sp-ver{
+    margin-top:15px;
+    margin-bottom:10px;
+    font:400 10px/1 var(--mono);
+    color:rgba(255,255,255,.18);
+}
 
 /* ===================== AUTH ===================== */
 #s-auth{padding:0;}
@@ -372,6 +492,18 @@ select.inp{appearance:none;-webkit-appearance:none;}
   background:rgba(82,183,136,.2);border:1px solid rgba(82,183,136,.26);
   border-bottom-right-radius:4px;
 }
+  .divider{
+    width:72px;
+    height:1px;
+    margin:24px 0 30px;
+    background:linear-gradient(
+        to right,
+        transparent,
+        rgba(82,183,136,.75),
+        transparent
+    );
+
+}
 .mtime{font-size:9.5px;color:rgba(255,255,255,.2);margin-top:2px;font-family:var(--mono);}
 .typing{display:flex;gap:3.5px;align-items:center;padding:5px 0;}
 .tdot{
@@ -559,9 +691,12 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
 <!-- ==================== SPLASH ==================== -->
 <div class="screen active" id="s-splash">
-<div style="overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:space-between;height:100%;padding:40px 22px calc(40px + env(safe-area-inset-bottom,0px)) 22px;text-align:center;">    <h1 class="sp-logo">Well<span>Match</span></h1>
-    <p class="sp-tag">専門家マッチング × ウェルネス</p>
-    <p class="sp-desc">心・体・お金・教育・美容・介護——人生のあらゆる場面で、頼れる専門家が待っています。</p>
+<div class="splash-inner"><p class="sp-tag">専門家マッチング × ウェルネス</p>
+    <p class="sp-desc">心・体・お金・教育・美容・介護。
+
+人生のあらゆる場面で、
+あなたに寄り添う専門家と出会えます。</p>
+  <div class="divider"></div>
     <div class="chips">
       <span class="chip">🧠 心理カウンセラー</span>
       <span class="chip">💰 ライフプランナー</span>
