@@ -164,7 +164,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
   flex:1;
   display:flex;flex-direction:column;align-items:center;justify-content:space-between;
   text-align:center;
-  padding:calc(env(safe-area-inset-top) + 28px) 24px 0;
+  padding:0;
   overflow:hidden;
 }
 .orb{
@@ -579,7 +579,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
 <!-- ==================== SPLASH ==================== -->
 <div class="screen active" id="s-splash">
-  <div class="splash-inner" style="justify-content:space-between;height:100dvh;box-sizing:border-box;">
+  <div class="splash-inner" style="padding-top:calc(env(safe-area-inset-top) + 28px);">
     <div style="display:flex;flex-direction:column;align-items:center;">
       <div class="orb"><span style="font-size:52px">🌿</span></div>
       <h1 class="sp-logo" style="margin-top:16px;">Well<span>Match</span></h1>
