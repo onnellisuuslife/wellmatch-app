@@ -28,30 +28,24 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:var(--sans);background:var(--dark);color:var(--white);-webkit-font-smoothing:antialiased;overscroll-behavior:none;}
-
 .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 15% 0%,rgba(27,67,50,.35) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 85% 100%,rgba(10,138,120,.2) 0%,transparent 60%),radial-gradient(ellipse 100% 50% at 50% 50%,rgba(6,20,16,.8) 0%,transparent 100%);}
-.stars{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(1px 1px at 15% 12%,rgba(149,213,178,.5) 0%,transparent 100%),radial-gradient(1px 1px at 35% 42%,rgba(149,213,178,.35) 0%,transparent 100%),radial-gradient(1px 1px at 65% 8%,rgba(149,213,178,.45) 0%,transparent 100%),radial-gradient(1px 1px at 82% 28%,rgba(149,213,178,.3) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 48% 55%,rgba(255,255,255,.12) 0%,transparent 100%);}
-
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(1px 1px at 15% 12%,rgba(149,213,178,.5) 0%,transparent 100%),radial-gradient(1px 1px at 35% 42%,rgba(149,213,178,.35) 0%,transparent 100%),radial-gradient(1px 1px at 65% 8%,rgba(149,213,178,.45) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 48% 55%,rgba(255,255,255,.12) 0%,transparent 100%);}
 .screen{position:fixed;inset:0;z-index:1;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;transform:translateY(12px);}
 .screen.active{opacity:1;pointer-events:auto;transform:none;}
-
 .topbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:calc(var(--safe-t) + 8px) 18px 8px;background:rgba(5,14,9,.85);backdrop-filter:blur(24px);border-bottom:1px solid rgba(82,183,136,.1);display:none;align-items:center;justify-content:space-between;min-height:56px;}
 .topbar.on{display:flex;}
 .tb-logo{font-family:var(--serif);font-size:16px;color:var(--g5);letter-spacing:.04em;}
 .tb-right{display:flex;align-items:center;gap:10px;}
 .xp-chip{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:50px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.18);font:500 11px/1 var(--mono);color:var(--g6);}
 .av-sm{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--g5),var(--t1));display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1.5px solid rgba(82,183,136,.3);}
-
 .bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:8px 0 calc(8px + var(--safe-b));background:rgba(5,14,9,.92);backdrop-filter:blur(24px);border-top:1px solid rgba(82,183,136,.1);display:none;justify-content:space-around;align-items:center;}
 .bottomnav.on{display:flex;}
 .nb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 14px;cursor:pointer;border:none;background:none;color:rgba(255,255,255,.28);transition:color .2s;}
 .nb.active{color:var(--g5);}
 .nb .ni{font-size:21px;line-height:1;}
 .nb .nl{font-size:9.5px;font-weight:700;letter-spacing:.04em;}
-
 .toast{position:fixed;top:calc(var(--safe-t) + 64px);right:14px;z-index:300;padding:7px 16px;border-radius:50px;background:rgba(255,209,102,.14);border:1px solid rgba(255,209,102,.32);font:600 12px/1 var(--mono);color:var(--a2);display:none;animation:toastIn .35s ease both;}
 @keyframes toastIn{from{opacity:0;transform:translateY(-8px) scale(.94)}to{opacity:1;transform:none}}
-
 .modal-ov{position:fixed;inset:0;z-index:200;background:rgba(5,14,9,.92);backdrop-filter:blur(18px);display:none;align-items:center;justify-content:center;padding:22px;}
 .modal-ov.on{display:flex;animation:toastIn .3s ease both;}
 .modal{background:rgba(18,46,32,.5);border:1px solid rgba(82,183,136,.2);border-radius:24px;padding:28px 22px;width:100%;max-width:370px;}
@@ -61,13 +55,15 @@ body{font-family:var(--sans);background:var(--dark);color:var(--white);-webkit-f
 .inp{width:100%;padding:10px 13px;background:rgba(255,255,255,.06);border:1.5px solid rgba(82,183,136,.2);border-radius:11px;color:var(--white);font-family:var(--sans);font-size:13.5px;outline:none;transition:border-color .2s;margin-bottom:12px;}
 .inp:focus{border-color:rgba(82,183,136,.5);}
 .inp::placeholder{color:rgba(255,255,255,.22);}
+.inp.error{border-color:var(--a1);}
 select.inp{appearance:none;-webkit-appearance:none;}
 .btn{width:100%;padding:13px;border:none;border-radius:50px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
 .btn-p{background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);box-shadow:0 4px 18px rgba(82,183,136,.3);}
 .btn-p:active{transform:scale(.98);}
 .btn-skip{background:none;border:none;color:rgba(255,255,255,.3);font-size:12.5px;font-family:var(--sans);cursor:pointer;padding:9px;width:100%;margin-top:4px;}
+.err-msg{color:var(--a1);font-size:11px;margin-top:-8px;margin-bottom:8px;display:none;}
 
-/* ===================== SPLASH ===================== */
+/* SPLASH */
 .splash-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:calc(var(--safe-t) + 32px) 24px calc(var(--safe-b) + 24px);overflow-y:auto;}
 .orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--g5),var(--g3));box-shadow:0 0 60px rgba(82,183,136,.35);display:flex;align-items:center;justify-content:center;animation:orbPulse 4s ease-in-out infinite;position:relative;}
 .orb::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(82,183,136,.25);animation:orbRing 6s linear infinite;}
@@ -82,23 +78,23 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .sp-btns{width:100%;max-width:300px;display:flex;flex-direction:column;gap:9px;}
 .sp-ver{font:400 10px/1 var(--mono);color:rgba(255,255,255,.18);}
 
-/* ===================== AUTH ===================== */
+/* AUTH */
 #s-auth{padding:0;}
-.auth-wrap{overflow-y:auto;padding:calc(var(--safe-t) + 56px) 20px 40px;height:100%;}
+.auth-wrap{overflow-y:auto;padding:calc(var(--safe-t) + 56px) 20px calc(40px + var(--safe-b));height:100%;}
 .back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--g6);font-size:13px;cursor:pointer;margin-bottom:22px;font-family:var(--sans);}
 .auth-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:24px;}
-.atab{flex:1;padding:10px 6px;font-size:12px;font-weight:700;background:none;border:none;color:rgba(255,255,255,.28);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:var(--sans);}
+.atab{flex:1;padding:10px 4px;font-size:11.5px;font-weight:700;background:none;border:none;color:rgba(255,255,255,.28);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:var(--sans);}
 .atab.active{color:var(--g5);border-bottom-color:var(--g5);}
 .asec{display:none;}
 .asec.active{display:block;}
 .auth-note{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:14px;line-height:1.6;}
 .form-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);display:block;margin-bottom:5px;}
-.form-group{margin-bottom:16px;}
+.form-group{margin-bottom:4px;}
 .tag-select{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-.tag-btn{padding:6px 12px;border-radius:50px;font-size:11.5px;font-weight:600;border:1.5px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.38);cursor:pointer;transition:all .2s;font-family:var(--sans);}
+.tag-btn{padding:6px 12px;border-radius:50px;font-size:11px;font-weight:600;border:1.5px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.38);cursor:pointer;transition:all .2s;font-family:var(--sans);}
 .tag-btn.active{background:rgba(82,183,136,.17);border-color:var(--g5);color:var(--g5);}
 
-/* ===================== HOME ===================== */
+/* HOME */
 #s-home{padding-top:56px;overflow-y:auto;}
 .home-scroll{padding:0 0 90px;}
 .home-hero{padding:20px 18px 16px;}
@@ -132,7 +128,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .match-btn{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);font:700 14.5px/1 var(--sans);cursor:pointer;box-shadow:0 4px 20px rgba(82,183,136,.3);transition:all .2s;}
 .match-btn:active{transform:scale(.98);}
 
-/* ===================== EXPERTS ===================== */
+/* EXPERTS */
 #s-experts{padding-top:56px;overflow-y:auto;}
 .exp-scroll{padding:0 0 90px;}
 .filter-row{display:flex;gap:7px;overflow-x:auto;padding:12px 18px 10px;scrollbar-width:none;}
@@ -158,7 +154,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .ebook-btn{padding:7px 16px;border-radius:50px;font-size:11.5px;font-weight:700;background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);border:none;cursor:pointer;transition:all .2s;}
 .ebook-btn:active{transform:scale(.97);}
 
-/* ===================== COUNSEL ===================== */
+/* COUNSEL */
 #s-counsel{padding:0;position:fixed;top:0;left:0;right:0;bottom:0;}
 .counsel-wrap{display:flex;flex-direction:column;height:100%;overflow:hidden;}
 .chd{padding:calc(var(--safe-t) + 8px) 18px 10px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(5,14,9,.8);}
@@ -197,7 +193,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .sbtn:active{transform:scale(.95);}
 .sbtn:disabled{opacity:.32;cursor:not-allowed;transform:none;}
 
-/* ===================== PROFILE ===================== */
+/* PROFILE */
 #s-profile{padding-top:56px;overflow-y:auto;}
 .prof-scroll{padding:0 0 90px;}
 .phero{padding:22px 18px 18px;text-align:center;}
@@ -222,12 +218,12 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .pmtxt{font-size:13.5px;font-weight:500;}
 .pmarr{margin-left:auto;font-size:11px;color:rgba(255,255,255,.22);}
 
-/* ===================== EXPERT HOME ===================== */
+/* EXPERT HOME */
 #s-expert-home{padding-top:56px;overflow-y:auto;}
 .expert-scroll{padding:0 0 90px;}
 .expert-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:0 18px;margin-bottom:20px;}
 
-/* ===================== MATCH ===================== */
+/* MATCH */
 #s-match{align-items:center;justify-content:center;padding:40px 22px;text-align:center;}
 .match-orb{width:150px;height:150px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;position:relative;}
 .mo-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(82,183,136,.28);animation:orbRing 3s linear infinite;}
@@ -247,7 +243,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .mbtn2{padding:10px 26px;border-radius:50px;font-size:13px;font-weight:600;background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);cursor:pointer;transition:all .2s;font-family:var(--sans);}
 .mbtn2:active{transform:scale(.98);}
 
-/* ===================== LEVELUP ===================== */
+/* LEVELUP */
 #s-lv{align-items:center;justify-content:center;padding:40px 22px;text-align:center;}
 .lv-glow{width:160px;height:160px;border-radius:50%;margin:0 auto 22px;background:radial-gradient(circle,rgba(255,209,102,.2) 0%,transparent 70%);display:flex;align-items:center;justify-content:center;animation:lvGlow 2s ease-in-out infinite;}
 @keyframes lvGlow{0%,100%{box-shadow:0 0 40px rgba(255,209,102,.25);}50%{box-shadow:0 0 80px rgba(255,209,102,.5),0 0 120px rgba(255,209,102,.15);}}
@@ -323,27 +319,60 @@ select.inp{appearance:none;-webkit-appearance:none;}
       <button class="atab" onclick="switchAuth('login',this)">ログイン</button>
       <button class="atab" onclick="switchAuth('expert',this)">専門家登録</button>
     </div>
+
+    <!-- 新規登録 -->
     <div class="asec active" id="a-register">
       <div class="form-group">
         <label class="form-label">ニックネーム（匿名でOK）</label>
         <input type="text" class="inp" id="rname" placeholder="例：あきひと、Taro" maxlength="20">
-        <p id="rnameErr" style="color:#FF6B6B;font-size:11px;margin-top:-8px;margin-bottom:8px;display:none;">ニックネームを入力してください</p>
+        <p class="err-msg" id="rname-err">ニックネームを入力してください</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">パスワード</label>
+        <input type="password" class="inp" id="rpass" placeholder="6文字以上">
+        <p class="err-msg" id="rpass-err">パスワードは6文字以上で入力してください</p>
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label">パスワード確認</label>
+        <input type="password" class="inp" id="rpass2" placeholder="もう一度入力">
+        <p class="err-msg" id="rpass2-err">パスワードが一致しません</p>
       </div>
       <button class="btn btn-p" onclick="register()">登録して始める ✨</button>
       <p class="auth-note">完全匿名・本名不要<br>いつでも退会可能</p>
     </div>
+
+    <!-- ログイン -->
     <div class="asec" id="a-login">
       <div class="form-group">
         <label class="form-label">ニックネーム</label>
         <input type="text" class="inp" id="lname" placeholder="登録時のニックネーム">
+        <p class="err-msg" id="lname-err">ニックネームを入力してください</p>
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label">パスワード</label>
+        <input type="password" class="inp" id="lpass" placeholder="パスワード">
+        <p class="err-msg" id="lpass-err">パスワードを入力してください</p>
       </div>
       <button class="btn btn-p" onclick="login()">ログイン</button>
       <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="demoLogin()">デモアカウントで入る</button>
     </div>
+
+    <!-- 専門家登録 -->
     <div class="asec" id="a-expert">
       <div class="form-group">
         <label class="form-label">お名前</label>
         <input type="text" class="inp" id="ename" placeholder="例：田中 美咲" maxlength="20">
+        <p class="err-msg" id="ename-err">お名前を入力してください</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">パスワード</label>
+        <input type="password" class="inp" id="epass" placeholder="6文字以上">
+        <p class="err-msg" id="epass-err">パスワードは6文字以上で入力してください</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">パスワード確認</label>
+        <input type="password" class="inp" id="epass2" placeholder="もう一度入力">
+        <p class="err-msg" id="epass2-err">パスワードが一致しません</p>
       </div>
       <div class="form-group">
         <label class="form-label">専門分野（複数選択可）</label>
@@ -361,16 +390,18 @@ select.inp{appearance:none;-webkit-appearance:none;}
           <button class="tag-btn" onclick="toggleTag(this)">🌿 マインドフル・ヨガ</button>
           <button class="tag-btn" onclick="toggleTag(this)">👴 介護・シニア</button>
         </div>
+        <p class="err-msg" id="etags-err">専門分野を1つ以上選んでください</p>
       </div>
       <div class="form-group">
         <label class="form-label">自己紹介</label>
         <textarea class="inp" id="ebio" placeholder="あなたの経歴や得意なことを教えてください" style="resize:none;height:80px;"></textarea>
+        <p class="err-msg" id="ebio-err">自己紹介を入力してください</p>
       </div>
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom:16px;">
         <label class="form-label">料金（1回あたり）</label>
         <input type="text" class="inp" id="eprice" placeholder="例：¥3,000">
+        <p class="err-msg" id="eprice-err">料金を入力してください</p>
       </div>
-      <p id="eregErr" style="color:#FF6B6B;font-size:11px;margin-bottom:8px;display:none;">必須項目を入力してください</p>
       <button class="btn btn-p" onclick="registerExpert()">専門家として登録する ✨</button>
       <p class="auth-note">登録後、WellMatch事務局が内容を確認します</p>
     </div>
@@ -404,12 +435,10 @@ select.inp{appearance:none;-webkit-appearance:none;}
         <p style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;">オンにすると利用者からの相談リクエストが届きます</p>
       </div>
       <p class="sec-lbl">届いた相談リクエスト</p>
-      <div class="qcard">
+      <div class="qcard" style="margin-bottom:20px;">
         <p style="font-size:13px;color:rgba(255,255,255,.4);text-align:center;padding:12px 0;">まだ相談リクエストはありません</p>
       </div>
-      <div style="margin-top:20px;">
-        <button class="btn" style="background:rgba(255,107,107,.1);color:var(--a1);border:1.5px solid rgba(255,107,107,.22);" onclick="logout()">ログアウト</button>
-      </div>
+      <button class="btn" style="background:rgba(255,107,107,.1);color:var(--a1);border:1.5px solid rgba(255,107,107,.22);" onclick="logout()">ログアウト</button>
     </div>
   </div>
 </div>
@@ -598,13 +627,14 @@ const allAch=[
 
 let S={user:null,demoMode:false,xp:0,level:1,streak:1,field:'mental',msgCount:0,history:[],questDone:new Set(),achEarned:new Set(),isPaid:false,isExpert:false};
 
+function showErr(id,show){document.getElementById(id).style.display=show?'block':'none';}
+
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s-'+id)?.classList.add('active');
   const isMain=['home','experts','counsel','profile','match','lv','expert-home'].includes(id);
   document.getElementById('topbar').classList.toggle('on',isMain&&id!=='counsel');
-  const showNav=['home','experts','counsel','profile'].includes(id);
-  document.getElementById('bottomnav').classList.toggle('on',showNav);
+  document.getElementById('bottomnav').classList.toggle('on',['home','experts','counsel','profile'].includes(id));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('nb-'+id)?.classList.add('active');
   if(id==='experts')renderExperts('all');
@@ -620,30 +650,50 @@ function switchAuth(tab,el){
 
 function register(){
   const name=document.getElementById('rname').value.trim();
-  if(!name){document.getElementById('rnameErr').style.display='block';return;}
-  document.getElementById('rnameErr').style.display='none';
+  const pass=document.getElementById('rpass').value;
+  const pass2=document.getElementById('rpass2').value;
+  let ok=true;
+  if(!name){showErr('rname-err',true);ok=false;}else{showErr('rname-err',false);}
+  if(pass.length<6){showErr('rpass-err',true);ok=false;}else{showErr('rpass-err',false);}
+  if(pass!==pass2){showErr('rpass2-err',true);ok=false;}else{showErr('rpass2-err',false);}
+  if(!ok)return;
   S.user={name,type:'ユーザー'};S.isExpert=false;initApp();
 }
+
 function login(){
-  const name=document.getElementById('lname').value.trim()||'ゲスト';
+  const name=document.getElementById('lname').value.trim();
+  const pass=document.getElementById('lpass').value;
+  let ok=true;
+  if(!name){showErr('lname-err',true);ok=false;}else{showErr('lname-err',false);}
+  if(!pass){showErr('lpass-err',true);ok=false;}else{showErr('lpass-err',false);}
+  if(!ok)return;
   S.user={name,type:'ユーザー'};S.isExpert=false;initApp();
 }
+
 function demoLogin(){S.user={name:'ゲスト',type:'ユーザー'};S.isExpert=false;initApp();}
 
 function toggleTag(el){el.classList.toggle('active');}
 
 function registerExpert(){
   const name=document.getElementById('ename').value.trim();
+  const pass=document.getElementById('epass').value;
+  const pass2=document.getElementById('epass2').value;
   const bio=document.getElementById('ebio').value.trim();
   const price=document.getElementById('eprice').value.trim();
   const tags=[...document.querySelectorAll('#expertTags .tag-btn.active')].map(b=>b.textContent.trim());
-  if(!name||!bio||tags.length===0){document.getElementById('eregErr').style.display='block';return;}
-  document.getElementById('eregErr').style.display='none';
+  let ok=true;
+  if(!name){showErr('ename-err',true);ok=false;}else{showErr('ename-err',false);}
+  if(pass.length<6){showErr('epass-err',true);ok=false;}else{showErr('epass-err',false);}
+  if(pass!==pass2){showErr('epass2-err',true);ok=false;}else{showErr('epass2-err',false);}
+  if(tags.length===0){showErr('etags-err',true);ok=false;}else{showErr('etags-err',false);}
+  if(!bio){showErr('ebio-err',true);ok=false;}else{showErr('ebio-err',false);}
+  if(!price){showErr('eprice-err',true);ok=false;}else{showErr('eprice-err',false);}
+  if(!ok)return;
   S.user={name,type:'expert',bio,price,tags};S.isExpert=true;
   document.getElementById('expName').textContent=name;
   document.getElementById('expTagsDisp').textContent=tags.slice(0,2).join(' / ');
-  go('expert-home');
   document.getElementById('topbar').classList.add('on');
+  go('expert-home');
   showToast('専門家として登録しました！ 🌿');
 }
 
@@ -701,7 +751,7 @@ function earnAch(id){
 }
 function renderAchievements(){
   const g=document.getElementById('achGrid');if(!g)return;
-  g.innerHTML=allAch.map(a=>`<div class="ac ${S.achEarned.has(a.id)?'earned':''}"><span class="aci">${a.icon}</span><div class="acn">${a.name}</div></div>`).join('');
+  g.innerHTML=allAch.map(a=>'<div class="ac '+(S.achEarned.has(a.id)?'earned':'')+'"><span class="aci">'+a.icon+'</span><div class="acn">'+a.name+'</div></div>').join('');
 }
 function animBars(){
   document.querySelectorAll('.mc-fill').forEach(b=>{
@@ -715,26 +765,7 @@ function recoverHP(field){
 function renderExperts(cat){
   const list=document.getElementById('expList');
   const filtered=cat==='all'?experts:experts.filter(e=>e.cat===cat);
-  list.innerHTML=filtered.map(e=>`
-    <div class="ecard">
-      <div class="etop">
-        <div class="eav">${e.emoji}</div>
-        <div class="einfo">
-          <div class="ename">${e.name}${e.isNew?' <span class="etag new">NEW</span>':''}</div>
-          <div class="erole">${e.role}</div>
-          <div class="etags">${e.tags.map(t=>'<span class="etag">'+t+'</span>').join('')}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
-          <span class="eprice">${e.price}</span>
-          ${e.avail?'<div class="avail"></div>':''}
-        </div>
-      </div>
-      <div class="edesc">${e.desc}</div>
-      <div class="emeta">
-        <div class="erat">⭐ ${e.rating}（${e.reviews}件）</div>
-        <button class="ebook-btn" onclick="bookExp(${e.id})">${e.avail?'予約する':'空き待ち'}</button>
-      </div>
-    </div>`).join('');
+  list.innerHTML=filtered.map(e=>'<div class="ecard"><div class="etop"><div class="eav">'+e.emoji+'</div><div class="einfo"><div class="ename">'+e.name+(e.isNew?' <span class="etag new">NEW</span>':'')+'</div><div class="erole">'+e.role+'</div><div class="etags">'+e.tags.map(t=>'<span class="etag">'+t+'</span>').join('')+'</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><span class="eprice">'+e.price+'</span>'+(e.avail?'<div class="avail"></div>':'')+'</div></div><div class="edesc">'+e.desc+'</div><div class="emeta"><div class="erat">⭐ '+e.rating+'（'+e.reviews+'件）</div><button class="ebook-btn" onclick="bookExp('+e.id+')">'+(e.avail?'予約する':'空き待ち')+'</button></div></div>').join('');
   earnAch('expert_check');addXP(5);completeQ('q2',30);
 }
 function filterExp(cat,el){
@@ -766,9 +797,7 @@ function switchField(field,el){
   document.getElementById('chatArea').innerHTML='';
   appendMsg('ai',fieldCfg[field].name+'に切り替えたよ🌿\nどんなことでも話してみてね。');
 }
-function addWelcome(){
-  appendMsg('ai','こんにちは！AIカウンセラーのハルだよ🌿\n\nどんな小さなことでも、遠慮なく話してね。');
-}
+function addWelcome(){appendMsg('ai','こんにちは！AIカウンセラーのハルだよ🌿\n\nどんな小さなことでも、遠慮なく話してね。');}
 function appendMsg(role,text){
   const area=document.getElementById('chatArea');
   const now=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
@@ -793,12 +822,8 @@ async function sendMsg(){
   appendMsg('user',text);
   S.history.push({role:'user',content:text});
   S.msgCount++;addXP(10);earnAch('first_talk');
-  if(S.msgCount>=5&&!S.isPaid){
-    document.getElementById('sbtn').disabled=false;
-    showPaywall();return;
-  }
-  completeQ('q1',50);recoverHP(S.field);
-  showTyping();
+  if(S.msgCount>=5&&!S.isPaid){document.getElementById('sbtn').disabled=false;showPaywall();return;}
+  completeQ('q1',50);recoverHP(S.field);showTyping();
   if(S.demoMode){
     await new Promise(r=>setTimeout(r,900+Math.random()*700));
     document.getElementById('typing')?.remove();
@@ -806,11 +831,7 @@ async function sendMsg(){
     appendMsg('ai',resp);S.history.push({role:'assistant',content:resp});
   }else{
     try{
-      const res=await fetch('https://wellmatch-api.mia-rockenry.workers.dev',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:fieldCfg[S.field].sys,messages:S.history})
-      });
+      const res=await fetch('https://wellmatch-api.mia-rockenry.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:fieldCfg[S.field].sys,messages:S.history})});
       const data=await res.json();
       document.getElementById('typing')?.remove();
       const reply=data.content?.[0]?.text||'もう一度話しかけてみてね。';
@@ -825,44 +846,4 @@ async function sendMsg(){
 }
 async function startMatch(){
   go('match');earnAch('matched');addXP(15);
-  const stages=[
-    {st:'ANALYZING...',tt:'悩みを分析中',sb:'AIがウェルネスマップを解析しています',ico:'🔍'},
-    {st:'MATCHING...',tt:'最適な専門家を探索中',sb:'12分野・専門家データと照合中',ico:'🔄'},
-    {st:'FOUND!',tt:'マッチング完了！',sb:'あなたに最適な専門家が見つかりました',ico:'✨'},
-  ];
-  for(const s of stages){
-    document.getElementById('mstat').textContent=s.st;
-    document.getElementById('mttl').textContent=s.tt;
-    document.getElementById('msub').textContent=s.sb;
-    document.getElementById('mico').textContent=s.ico;
-    document.getElementById('mcards').innerHTML='';
-    document.getElementById('mbtn').style.display='none';
-    await new Promise(r=>setTimeout(r,1300));
-  }
-  const matched=experts.filter(e=>e.avail).slice(0,3);
-  document.getElementById('mcards').innerHTML=matched.map(e=>'<div class="mcard"><span class="mcard-ico">'+e.emoji+'</span><div><div class="mcn">'+e.name+'</div><div class="mcs">'+e.role.split('/')[0].trim()+' ⭐'+e.rating+'</div></div><span class="mchk">✓</span></div>').join('');
-  document.getElementById('mbtn').style.display='inline-block';
-}
-function renderProfile(){renderAchievements();updateStats();}
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/sw.js').catch(e=>console.log('SW error',e));
-  });
-}
-window.addEventListener('load',()=>{
-  const isIOS=/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-  if(isIOS&&!window.navigator.standalone){
-    setTimeout(()=>{
-      const hint=document.createElement('div');
-      hint.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(27,67,50,.95);color:#D8F3DC;padding:10px 18px;border-radius:50px;font-size:11.5px;z-index:999;white-space:nowrap;border:1px solid rgba(82,183,136,.3);';
-      hint.textContent='📲 共有 → ホーム画面に追加 でアプリ化できます';
-      document.body.appendChild(hint);
-      setTimeout(()=>hint.remove(),5000);
-    },3000);
-  }
-});
-go('splash');
-</script>
-</body>
-</html>
+  const stages=[{st:'ANALYZING...',tt:'悩みを分析中',sb:'AIがウェルネスマップを解析しています',ico:'🔍'},{st:'MATCHING...',tt:'最適な専門家を探索中',sb:'12分野・専門家データと照合中',ico:'🔄'},{st:'FOUND!',tt:
