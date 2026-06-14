@@ -856,6 +856,12 @@ function login(){
 function demoLogin(){S.user={name:'ゲスト',type:'ユーザー'};initApp();}
 function logout(){
   S={...S,user:null,xp:0,level:1,msgCount:0,questDone:new Set(),achEarned:new Set(),isPaid:false};
+  setTimeout(()=>{
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:red;color:white;padding:10px;z-index:9999;font-size:12px;';
+  d.textContent='screen:'+screen.height+' inner:'+window.innerHeight+' splash:'+document.getElementById('s-splash').offsetHeight;
+  document.body.appendChild(d);
+},1000);
   go('splash');
   document.getElementById('topbar').classList.remove('on');
   document.getElementById('bottomnav').classList.remove('on');
