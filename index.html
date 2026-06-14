@@ -191,7 +191,12 @@ select.inp{appearance:none;-webkit-appearance:none;}
   padding:5px 12px;border-radius:50px;font-size:10.5px;font-weight:600;
   border:1px solid rgba(82,183,136,.25);background:rgba(82,183,136,.07);color:var(--g6);
 }
-.sp-btns{width:100%;max-width:300px;display:flex;flex-direction:column;gap:9px;}
+.sp-btns{
+  width:100%;
+  max-width:300px;
+  display:flex;flex-direction:column;gap:9px;
+  padding-bottom:env(safe-area-inset-bottom);
+}
 .sp-ver{font:400 10px/1 var(--mono);color:rgba(255,255,255,.18);}
 
 /* ===================== AUTH ===================== */
@@ -574,7 +579,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
 <!-- ==================== SPLASH ==================== -->
 <div class="screen active" id="s-splash">
-  <div class="splash-inner">
+  <div class="splash-inner" style="justify-content:space-between;height:100dvh;box-sizing:border-box;">
     <div style="display:flex;flex-direction:column;align-items:center;">
       <div class="orb"><span style="font-size:52px">🌿</span></div>
       <h1 class="sp-logo" style="margin-top:16px;">Well<span>Match</span></h1>
