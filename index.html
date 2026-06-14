@@ -154,6 +154,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 #s-splash{
   position:fixed;inset:0;z-index:1;
   display:flex;flex-direction:column;
+  height:100%;
   opacity:0;pointer-events:none;
   transition:opacity .3s ease,transform .3s ease;
   transform:translateY(12px);
@@ -163,8 +164,8 @@ select.inp{appearance:none;-webkit-appearance:none;}
   flex:1;
   display:flex;flex-direction:column;align-items:center;justify-content:space-between;
   text-align:center;
-  padding:calc(var(--safe-t) + 36px) 24px calc(var(--safe-b) + 28px);
-  overflow-y:auto;
+  padding:calc(env(safe-area-inset-top) + 32px) 24px calc(env(safe-area-inset-bottom) + 16px);
+  min-height:0;
 }
 .orb{
   width:120px;height:120px;border-radius:50%;
