@@ -7,12 +7,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WellMatch">
 <meta name="theme-color" content="#0A1A0F">
-<meta name="description" content="心・体・お金・教育——あなたの人生の悩みに寄り添う専門家マッチング">
+<meta name="description" content="尼崎のこころのサポート——AIカウンセラー「ハル」と専門カウンセラーがあなたに寄り添います">
 <title>WellMatch</title>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700;900&family=Shippori+Mincho:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.stripe.com/v3/"></script>
 <style>
 :root{
   --g1:#061410;--g2:#0D2B1E;--g3:#1B4332;--g4:#2D6A4F;--g5:#52B788;--g6:#95D5B2;--g7:#D8F3DC;
@@ -37,6 +37,7 @@ body{font-family:var(--sans);background:var(--dark);color:var(--white);-webkit-f
 .tb-logo{font-family:var(--serif);font-size:16px;color:var(--g5);letter-spacing:.04em;}
 .tb-right{display:flex;align-items:center;gap:10px;}
 .xp-chip{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:50px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.18);font:500 11px/1 var(--mono);color:var(--g6);}
+.lang-btn{padding:3px 9px;border-radius:50px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.18);font:600 10px/1 var(--mono);color:var(--g6);cursor:pointer;}
 .av-sm{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--g5),var(--t1));display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1.5px solid rgba(82,183,136,.3);}
 .bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:8px 0 calc(8px + var(--safe-b));background:rgba(5,14,9,.92);backdrop-filter:blur(24px);border-top:1px solid rgba(82,183,136,.1);display:none;justify-content:space-around;align-items:center;}
 .bottomnav.on{display:flex;}
@@ -90,9 +91,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .auth-note{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:14px;line-height:1.6;}
 .form-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);display:block;margin-bottom:5px;}
 .form-group{margin-bottom:4px;}
-.tag-select{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-.tag-btn{padding:6px 12px;border-radius:50px;font-size:11px;font-weight:600;border:1.5px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.38);cursor:pointer;transition:all .2s;font-family:var(--sans);}
-.tag-btn.active{background:rgba(82,183,136,.17);border-color:var(--g5);color:var(--g5);}
+.auth-err{color:var(--a1);font-size:12px;text-align:center;margin-bottom:10px;display:none;}
 
 /* HOME */
 #s-home{padding-top:56px;overflow-y:auto;}
@@ -105,13 +104,6 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .stat-n{font:700 20px/1 var(--mono);color:var(--g5);}
 .stat-l{font-size:9px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.04em;}
 .sec-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g6);padding:0 18px;margin-bottom:10px;}
-.map-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:0 18px;margin-bottom:20px;}
-.mc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .25s;}
-.mc:active{transform:scale(.96);}
-.mc .me{font-size:22px;display:block;margin-bottom:5px;}
-.mc .mn{font-size:10px;font-weight:600;margin-bottom:5px;line-height:1.2;}
-.mc-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
-.mc-fill{height:100%;border-radius:2px;transition:width 1.8s cubic-bezier(.34,1.56,.64,1);}
 .quest-wrap{padding:0 18px;margin-bottom:20px;}
 .qcard{background:rgba(27,67,50,.3);border:1px solid rgba(82,183,136,.16);border-radius:18px;padding:16px;}
 .qhd{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
@@ -128,13 +120,13 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .match-btn{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);font:700 14.5px/1 var(--sans);cursor:pointer;box-shadow:0 4px 20px rgba(82,183,136,.3);transition:all .2s;}
 .match-btn:active{transform:scale(.98);}
 
-/* EXPERTS */
+/* SESSION BAR */
+.sess-bar{margin:0 18px 18px;padding:10px 14px;border-radius:12px;background:rgba(82,183,136,.08);border:1px solid rgba(82,183,136,.18);font-size:12px;color:var(--g6);display:flex;align-items:center;justify-content:space-between;}
+.sess-bar.premium{background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.22);color:var(--a2);}
+
+/* EXPERTS / COUNSELORS */
 #s-experts{padding-top:56px;overflow-y:auto;}
 .exp-scroll{padding:0 0 90px;}
-.filter-row{display:flex;gap:7px;overflow-x:auto;padding:12px 18px 10px;scrollbar-width:none;}
-.filter-row::-webkit-scrollbar{display:none;}
-.fbtn{flex-shrink:0;padding:6px 13px;border-radius:50px;font-size:11.5px;font-weight:600;border:1.5px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.38);cursor:pointer;transition:all .2s;font-family:var(--sans);}
-.fbtn.active{background:rgba(82,183,136,.17);border-color:var(--g5);color:var(--g5);}
 .exp-list{padding:0 18px;display:flex;flex-direction:column;gap:12px;}
 .ecard{background:rgba(27,67,50,.22);border:1px solid rgba(82,183,136,.12);border-radius:18px;padding:16px;cursor:pointer;transition:all .25s;}
 .ecard:active{transform:scale(.99);}
@@ -145,7 +137,6 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .erole{font-size:11px;color:var(--g6);margin-bottom:5px;}
 .etags{display:flex;flex-wrap:wrap;gap:4px;}
 .etag{padding:2px 8px;border-radius:50px;font-size:9.5px;font-weight:600;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.18);color:var(--g6);}
-.etag.new{background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.22);color:var(--a1);}
 .eprice{font:700 12px/1 var(--mono);color:var(--a2);margin-left:auto;flex-shrink:0;}
 .edesc{font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:10px;}
 .emeta{display:flex;align-items:center;justify-content:space-between;}
@@ -158,17 +149,14 @@ select.inp{appearance:none;-webkit-appearance:none;}
 #s-counsel{padding:0;position:fixed;top:0;left:0;right:0;bottom:0;}
 .counsel-wrap{display:flex;flex-direction:column;height:100%;overflow:hidden;}
 .chd{padding:calc(var(--safe-t) + 8px) 18px 10px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(5,14,9,.8);}
-.chd-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.chd-top{display:flex;align-items:center;gap:10px;margin-bottom:0;}
 .back-circle{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.07);border:none;color:var(--white);font-size:13px;cursor:pointer;flex-shrink:0;}
 .ct-name{font-size:14px;font-weight:700;}
 .ct-sub{font-size:10.5px;color:var(--g6);}
 .online{display:flex;align-items:center;gap:4px;margin-left:auto;}
 .ondot{width:7px;height:7px;border-radius:50%;background:var(--a3);box-shadow:0 0 6px var(--a3);animation:orbPulse 2s infinite;}
 .ontxt{font-size:10.5px;color:var(--a3);}
-.ftabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
-.ftabs::-webkit-scrollbar{display:none;}
-.ftab{flex-shrink:0;padding:5px 11px;border-radius:50px;font-size:10.5px;font-weight:600;border:1.5px solid rgba(255,255,255,.1);background:none;color:rgba(255,255,255,.35);cursor:pointer;transition:all .2s;font-family:var(--sans);}
-.ftab.active{background:rgba(82,183,136,.17);border-color:var(--g5);color:var(--g5);}
+.chat-sess-info{font-size:10.5px;color:var(--g6);text-align:center;padding:5px 18px;background:rgba(82,183,136,.06);border-bottom:1px solid rgba(82,183,136,.1);}
 .chat-area{flex:1;min-height:0;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:11px;padding-bottom:4px;}
 .chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:rgba(82,183,136,.2);border-radius:1px;}
@@ -218,32 +206,21 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .pmtxt{font-size:13.5px;font-weight:500;}
 .pmarr{margin-left:auto;font-size:11px;color:rgba(255,255,255,.22);}
 
-/* EXPERT HOME */
-#s-expert-home{padding-top:56px;overflow-y:auto;}
-.expert-scroll{padding:0 0 90px;}
-.expert-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:0 18px;margin-bottom:20px;}
+/* MATCH MODAL (Sheet) */
+.sheet-ov{position:fixed;inset:0;z-index:200;background:rgba(5,14,9,.7);backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;}
+.sheet-ov.on{display:flex;animation:toastIn .3s ease both;}
+.sheet{background:rgba(13,43,30,.97);border:1px solid rgba(82,183,136,.2);border-radius:24px 24px 0 0;padding:20px 22px calc(20px + var(--safe-b));width:100%;max-width:480px;}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin:0 auto 18px;}
+.sheet h3{font-family:var(--serif);font-size:18px;margin-bottom:6px;}
+.sheet p{font-size:12.5px;color:var(--g6);margin-bottom:18px;line-height:1.65;}
 
-/* MATCH */
-#s-match{align-items:center;justify-content:center;padding:40px 22px;text-align:center;}
-.match-orb{width:150px;height:150px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;position:relative;}
-.mo-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(82,183,136,.28);animation:orbRing 3s linear infinite;}
-.mo-ring2{position:absolute;inset:-20px;border-radius:50%;border:1px solid rgba(82,183,136,.14);animation:orbRing 5s linear infinite reverse;}
-.mo-center{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--g5),var(--g3));display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:0 0 50px rgba(82,183,136,.35);}
-.mstatus{font:600 11px/1 var(--mono);color:var(--g6);letter-spacing:.12em;margin-bottom:7px;}
-.mtitle{font-family:var(--serif);font-size:26px;margin-bottom:6px;}
-.msub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:28px;line-height:1.65;}
-.mcards{display:flex;flex-direction:column;gap:9px;width:100%;max-width:320px;margin:0 auto 26px;}
-.mcard{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(82,183,136,.07);border:1px solid rgba(82,183,136,.18);text-align:left;}
-.mcard-ico{font-size:22px;flex-shrink:0;}
-.mcn{font-size:12.5px;font-weight:700;color:var(--white);}
-.mcs{font-size:10.5px;color:var(--g6);margin-top:1.5px;}
-.mchk{margin-left:auto;font-size:15px;color:var(--g5);}
-.mbtn{padding:13px 30px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);font:700 14px/1 var(--sans);cursor:pointer;display:none;margin-bottom:10px;transition:all .2s;}
-.mbtn:active{transform:scale(.98);}
-.mbtn2{padding:10px 26px;border-radius:50px;font-size:13px;font-weight:600;background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);cursor:pointer;transition:all .2s;font-family:var(--sans);}
-.mbtn2:active{transform:scale(.98);}
+/* PAYWALL */
+#paywallMod .modal{text-align:center;}
+.price-box{background:rgba(82,183,136,.08);border:1px solid rgba(82,183,136,.2);border-radius:14px;padding:16px;margin-bottom:18px;}
+.price-big{font:700 32px/1 var(--mono);color:var(--g5);}
+.price-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;}
 
-/* LEVELUP */
+/* LEVEL UP */
 #s-lv{align-items:center;justify-content:center;padding:40px 22px;text-align:center;}
 .lv-glow{width:160px;height:160px;border-radius:50%;margin:0 auto 22px;background:radial-gradient(circle,rgba(255,209,102,.2) 0%,transparent 70%);display:flex;align-items:center;justify-content:center;animation:lvGlow 2s ease-in-out infinite;}
 @keyframes lvGlow{0%,100%{box-shadow:0 0 40px rgba(255,209,102,.25);}50%{box-shadow:0 0 80px rgba(255,209,102,.5),0 0 120px rgba(255,209,102,.15);}}
@@ -251,11 +228,8 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .lvbadge{font:600 10.5px/1 var(--mono);color:var(--a2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
 .lvtitle{font-family:var(--serif);font-size:32px;margin-bottom:5px;}
 .lvsub{font-size:13.5px;color:var(--g6);margin-bottom:26px;}
-.ach-list{display:flex;flex-direction:column;gap:9px;margin-bottom:28px;width:100%;max-width:300px;}
-.ali{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.16);text-align:left;}
-.ali-ico{font-size:20px;flex-shrink:0;}
-.aln{font-size:12.5px;font-weight:700;color:var(--a2);}
-.ald{font-size:10.5px;color:rgba(255,255,255,.38);margin-top:1.5px;}
+.mbtn2{padding:10px 26px;border-radius:50px;font-size:13px;font-weight:600;background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);cursor:pointer;transition:all .2s;font-family:var(--sans);}
+.mbtn2:active{transform:scale(.98);}
 </style>
 </head>
 <body>
@@ -263,30 +237,52 @@ select.inp{appearance:none;-webkit-appearance:none;}
 <div class="stars"></div>
 <div class="toast" id="toast"></div>
 
+<!-- TOP BAR -->
 <div class="topbar" id="topbar">
   <div class="tb-logo">WellMatch</div>
   <div class="tb-right">
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
     <div class="xp-chip">⚡ <span id="xpV">0</span></div>
-    <div class="xp-chip">Lv.<span id="lvV">1</span></div>
     <div class="av-sm" id="topAv" onclick="go('profile')">😊</div>
   </div>
 </div>
 
+<!-- BOTTOM NAV -->
 <div class="bottomnav" id="bottomnav">
-  <button class="nb" id="nb-home" onclick="go('home')"><span class="ni">🏠</span><span class="nl">ホーム</span></button>
-  <button class="nb" id="nb-experts" onclick="go('experts')"><span class="ni">👥</span><span class="nl">専門家</span></button>
-  <button class="nb" id="nb-counsel" onclick="go('counsel')"><span class="ni">💬</span><span class="nl">相談</span></button>
-  <button class="nb" id="nb-profile" onclick="go('profile')"><span class="ni">👤</span><span class="nl">マイページ</span></button>
+  <button class="nb" id="nb-home" onclick="go('home')"><span class="ni">🏠</span><span class="nl" data-i="nav_home">ホーム</span></button>
+  <button class="nb" id="nb-experts" onclick="go('experts')"><span class="ni">👥</span><span class="nl" data-i="nav_experts">カウンセラー</span></button>
+  <button class="nb" id="nb-counsel" onclick="go('counsel')"><span class="ni">💬</span><span class="nl" data-i="nav_counsel">相談</span></button>
+  <button class="nb" id="nb-profile" onclick="go('profile')"><span class="ni">👤</span><span class="nl" data-i="nav_profile">マイページ</span></button>
 </div>
 
+<!-- PAYWALL MODAL -->
 <div class="modal-ov" id="paywallMod">
   <div class="modal">
     <span class="m-ico">🌿</span>
-    <div class="m-ttl">無料の相談回数を使い切ったよ</div>
-    <div class="m-desc">ハルともっと話したいな🌿<br>続けるプランを選んでね。</div>
-    <button class="btn btn-p" onclick="document.getElementById('paywallMod').classList.remove('on')">① 月額1,000円でハルと続ける</button>
-    <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="document.getElementById('paywallMod').classList.remove('on');go('experts')">② 専門家に直接相談する</button>
-    <button class="btn-skip" onclick="document.getElementById('paywallMod').classList.remove('on')">あとで決める</button>
+    <div class="m-ttl" data-i="pw_title">無料の相談が終わったよ</div>
+    <div class="m-desc" data-i="pw_desc">5回の無料相談をありがとう🌿<br>続けるにはプレミアムプランへ。</div>
+    <div class="price-box">
+      <div class="price-big">¥1,000</div>
+      <div class="price-sub" data-i="pw_sub">/ 月　無制限でハルと相談</div>
+    </div>
+    <button class="btn btn-p" id="stripeBtn" onclick="startStripe()" data-i="pw_cta">プレミアムを始める</button>
+    <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="closePaywall();go('experts')" data-i="pw_alt">専門カウンセラーに相談する</button>
+    <button class="btn-skip" onclick="closePaywall()" data-i="pw_skip">あとで決める</button>
+  </div>
+</div>
+
+<!-- MATCH SHEET -->
+<div class="sheet-ov" id="matchSheet">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h3 id="sheet-name">カウンセラー名</h3>
+    <p id="sheet-bio">紹介文</p>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label class="form-label" data-i="match_msg_label">メッセージ（任意）</label>
+      <textarea class="inp" id="match-msg" rows="3" style="resize:none;" data-placeholder-i="match_msg_ph"></textarea>
+    </div>
+    <button class="btn btn-p" onclick="submitMatch()" data-i="match_submit">相談を申し込む</button>
+    <button class="btn-skip" onclick="closeSheet()" data-i="cancel">キャンセル</button>
   </div>
 </div>
 
@@ -296,16 +292,19 @@ select.inp{appearance:none;-webkit-appearance:none;}
     <div style="display:flex;flex-direction:column;align-items:center;">
       <div class="orb"><span style="font-size:52px">🌿</span></div>
       <h1 class="sp-logo" style="margin-top:16px;">Well<span>Match</span></h1>
-      <p class="sp-tag">専門家マッチング × ウェルネス</p>
-      <p class="sp-desc">心・体・お金・教育・美容・介護——人生のあらゆる場面で、頼れる専門家が待っています。</p>
+      <p class="sp-tag" data-i="sp_tag">尼崎のこころのサポート</p>
+      <p class="sp-desc" data-i="sp_desc">AIカウンセラー「ハル」がいつでも寄り添います。必要なときは、専門のカウンセラーにつなぎます。</p>
     </div>
     <div class="chips">
-      <span class="chip">🧠 心理カウンセラー</span><span class="chip">💰 ライフプランナー</span><span class="chip">💪 トレーナー</span><span class="chip">🎓 家庭教師</span><span class="chip">🥗 栄養士</span><span class="chip">🌈 LGBTQ+</span><span class="chip">💄 美容</span><span class="chip">👴 介護</span><span class="chip">12分野以上対応</span>
+      <span class="chip">🤖 AI 24時間対応</span>
+      <span class="chip">🔒 匿名・安全</span>
+      <span class="chip">💚 5回まで無料</span>
+      <span class="chip">📍 尼崎市民向け</span>
     </div>
     <div class="sp-btns">
-      <button class="btn btn-p" onclick="go('auth')">はじめる →</button>
-      <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);" onclick="demoLogin()">ログインせずに体験する</button>
-      <p class="sp-ver">WellMatch v2.0</p>
+      <button class="btn btn-p" onclick="go('auth')" data-i="sp_start">はじめる →</button>
+      <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);" onclick="demoLogin()" data-i="sp_demo">ログインせずに体験する</button>
+      <p class="sp-ver">WellMatch v3.0 | 尼崎市</p>
     </div>
   </div>
 </div>
@@ -313,132 +312,39 @@ select.inp{appearance:none;-webkit-appearance:none;}
 <!-- AUTH -->
 <div class="screen" id="s-auth">
   <div class="auth-wrap">
-    <button class="back-btn" onclick="go('splash')">← 戻る</button>
+    <button class="back-btn" onclick="go('splash')">← <span data-i="back">戻る</span></button>
     <div class="auth-tabs">
-      <button class="atab active" onclick="switchAuth('register',this)">新規登録</button>
-      <button class="atab" onclick="switchAuth('login',this)">ログイン</button>
-      <button class="atab" onclick="switchAuth('expert',this)">専門家登録</button>
+      <button class="atab active" onclick="switchAuth('register',this)" data-i="tab_register">新規登録</button>
+      <button class="atab" onclick="switchAuth('login',this)" data-i="tab_login">ログイン</button>
     </div>
+    <div id="auth-global-err" class="auth-err"></div>
 
-    <!-- 新規登録 -->
+    <!-- 登録 -->
     <div class="asec active" id="a-register">
       <div class="form-group">
-        <label class="form-label">ニックネーム（匿名でOK）</label>
-        <input type="text" class="inp" id="rname" placeholder="例：あきひと、Taro" maxlength="20">
-        <p class="err-msg" id="rname-err">ニックネームを入力してください</p>
-      </div>
-      <div class="form-group">
-        <label class="form-label">パスワード</label>
-        <input type="password" class="inp" id="rpass" placeholder="6文字以上">
-        <p class="err-msg" id="rpass-err">パスワードは6文字以上で入力してください</p>
+        <label class="form-label" data-i="lbl_email">メールアドレス</label>
+        <input type="email" class="inp" id="rEmail" data-placeholder-i="ph_email">
       </div>
       <div class="form-group" style="margin-bottom:16px;">
-        <label class="form-label">パスワード確認</label>
-        <input type="password" class="inp" id="rpass2" placeholder="もう一度入力">
-        <p class="err-msg" id="rpass2-err">パスワードが一致しません</p>
+        <label class="form-label" data-i="lbl_pass">パスワード</label>
+        <input type="password" class="inp" id="rPass" data-placeholder-i="ph_pass">
       </div>
-      <button class="btn btn-p" onclick="register()">登録して始める ✨</button>
-      <p class="auth-note">完全匿名・本名不要<br>いつでも退会可能</p>
+      <button class="btn btn-p" onclick="register()" data-i="btn_register">登録して始める ✨</button>
+      <p class="auth-note" data-i="auth_note">完全匿名・本名不要 / いつでも退会可能</p>
     </div>
 
     <!-- ログイン -->
     <div class="asec" id="a-login">
       <div class="form-group">
-        <label class="form-label">ニックネーム</label>
-        <input type="text" class="inp" id="lname" placeholder="登録時のニックネーム">
-        <p class="err-msg" id="lname-err">ニックネームを入力してください</p>
+        <label class="form-label" data-i="lbl_email">メールアドレス</label>
+        <input type="email" class="inp" id="lEmail" data-placeholder-i="ph_email">
       </div>
       <div class="form-group" style="margin-bottom:16px;">
-        <label class="form-label">パスワード</label>
-        <input type="password" class="inp" id="lpass" placeholder="パスワード">
-        <p class="err-msg" id="lpass-err">パスワードを入力してください</p>
+        <label class="form-label" data-i="lbl_pass">パスワード</label>
+        <input type="password" class="inp" id="lPass" data-placeholder-i="ph_pass">
       </div>
-      <button class="btn btn-p" onclick="login()">ログイン</button>
-      <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="demoLogin()">デモアカウントで入る</button>
-    </div>
-
-    <!-- 専門家登録 -->
-    <div class="asec" id="a-expert">
-      <div class="form-group">
-        <label class="form-label">お名前</label>
-        <input type="text" class="inp" id="ename" placeholder="例：田中 美咲" maxlength="20">
-        <p class="err-msg" id="ename-err">お名前を入力してください</p>
-      </div>
-      <div class="form-group">
-        <label class="form-label">パスワード</label>
-        <input type="password" class="inp" id="epass" placeholder="6文字以上">
-        <p class="err-msg" id="epass-err">パスワードは6文字以上で入力してください</p>
-      </div>
-      <div class="form-group">
-        <label class="form-label">パスワード確認</label>
-        <input type="password" class="inp" id="epass2" placeholder="もう一度入力">
-        <p class="err-msg" id="epass2-err">パスワードが一致しません</p>
-      </div>
-      <div class="form-group">
-        <label class="form-label">専門分野（複数選択可）</label>
-        <div class="tag-select" id="expertTags">
-          <button class="tag-btn" onclick="toggleTag(this)">🧠 メンタル</button>
-          <button class="tag-btn" onclick="toggleTag(this)">💼 仕事・キャリア</button>
-          <button class="tag-btn" onclick="toggleTag(this)">💑 恋愛・人間関係</button>
-          <button class="tag-btn" onclick="toggleTag(this)">💪 健康・フィットネス</button>
-          <button class="tag-btn" onclick="toggleTag(this)">💰 お金・ライフプラン</button>
-          <button class="tag-btn" onclick="toggleTag(this)">🏠 家族・育児</button>
-          <button class="tag-btn" onclick="toggleTag(this)">🌈 LGBTQ+</button>
-          <button class="tag-btn" onclick="toggleTag(this)">📚 学習・不登校</button>
-          <button class="tag-btn" onclick="toggleTag(this)">💄 美容</button>
-          <button class="tag-btn" onclick="toggleTag(this)">🥗 栄養・食事</button>
-          <button class="tag-btn" onclick="toggleTag(this)">🌿 マインドフル・ヨガ</button>
-          <button class="tag-btn" onclick="toggleTag(this)">👴 介護・シニア</button>
-        </div>
-        <p class="err-msg" id="etags-err">専門分野を1つ以上選んでください</p>
-      </div>
-      <div class="form-group">
-        <label class="form-label">自己紹介</label>
-        <textarea class="inp" id="ebio" placeholder="あなたの経歴や得意なことを教えてください" style="resize:none;height:80px;"></textarea>
-        <p class="err-msg" id="ebio-err">自己紹介を入力してください</p>
-      </div>
-      <div class="form-group" style="margin-bottom:16px;">
-        <label class="form-label">料金（1回あたり）</label>
-        <input type="text" class="inp" id="eprice" placeholder="例：¥3,000">
-        <p class="err-msg" id="eprice-err">料金を入力してください</p>
-      </div>
-      <button class="btn btn-p" onclick="registerExpert()">専門家として登録する ✨</button>
-      <p class="auth-note">登録後、WellMatch事務局が内容を確認します</p>
-    </div>
-  </div>
-</div>
-
-<!-- EXPERT HOME -->
-<div class="screen" id="s-expert-home">
-  <div class="expert-scroll">
-    <div class="phero">
-      <div class="pav-lg" id="expAvLg">🌿</div>
-      <h2 class="pname" id="expName">みちる</h2>
-      <p class="ptype" id="expTagsDisp">専門家</p>
-      <div class="lv-wrap">
-        <div class="lv-lbl"><span>今月の相談件数</span><span id="expCount">0件</span></div>
-        <div class="lv-track"><div class="lv-fill" id="expBar" style="width:0%"></div></div>
-      </div>
-    </div>
-    <div class="expert-stats">
-      <div class="stat"><div class="stat-n" id="expRating">—</div><div class="stat-l">評価</div></div>
-      <div class="stat"><div class="stat-n" id="expSessions">0</div><div class="stat-l">相談数</div></div>
-      <div class="stat"><div class="stat-n" id="expEarnings">¥0</div><div class="stat-l">今月収益</div></div>
-    </div>
-    <div style="padding:0 18px;">
-      <p class="sec-lbl">ステータス</p>
-      <div class="qcard" style="margin-bottom:16px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <span style="font-size:13px;font-weight:700;">相談を受け付ける</span>
-          <div class="ondot"></div>
-        </div>
-        <p style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;">オンにすると利用者からの相談リクエストが届きます</p>
-      </div>
-      <p class="sec-lbl">届いた相談リクエスト</p>
-      <div class="qcard" style="margin-bottom:20px;">
-        <p style="font-size:13px;color:rgba(255,255,255,.4);text-align:center;padding:12px 0;">まだ相談リクエストはありません</p>
-      </div>
-      <button class="btn" style="background:rgba(255,107,107,.1);color:var(--a1);border:1.5px solid rgba(255,107,107,.22);" onclick="logout()">ログアウト</button>
+      <button class="btn btn-p" onclick="login()" data-i="btn_login">ログイン</button>
+      <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="demoLogin()" data-i="sp_demo">デモアカウントで入る</button>
     </div>
   </div>
 </div>
@@ -448,87 +354,76 @@ select.inp{appearance:none;-webkit-appearance:none;}
   <div class="home-scroll">
     <div class="home-hero">
       <p class="h-greet" id="hgreet">おかえりなさい 🌿</p>
-      <h2 class="h-name" id="hname">明仁さん</h2>
+      <h2 class="h-name" id="hname">さん</h2>
       <div class="stats-row">
         <div class="stat"><div class="stat-n" id="sxp">0</div><div class="stat-l">XP</div></div>
-        <div class="stat"><div class="stat-n" id="slv">1</div><div class="stat-l">LEVEL</div></div>
-        <div class="stat"><div class="stat-n" id="sstr">1</div><div class="stat-l">日連続</div></div>
+        <div class="stat"><div class="stat-n" id="ssess">5</div><div class="stat-l" data-i="stat_left">残り無料</div></div>
+        <div class="stat"><div class="stat-n" id="sstr">1</div><div class="stat-l" data-i="stat_streak">日連続</div></div>
       </div>
     </div>
-    <p class="sec-lbl">ウェルネスマップ 🗺</p>
-    <div class="map-grid">
-      <div class="mc" onclick="startCounsel('mental')"><span class="me">🧠</span><div class="mn">メンタル</div><div class="mc-bar"><div class="mc-fill" id="mb-mental" style="width:45%;background:linear-gradient(90deg,#06D6A0,#52B788)"></div></div></div>
-      <div class="mc" onclick="startCounsel('work')"><span class="me">💼</span><div class="mn">仕事</div><div class="mc-bar"><div class="mc-fill" id="mb-work" style="width:62%;background:linear-gradient(90deg,#A29BFE,#6c5ce7)"></div></div></div>
-      <div class="mc" onclick="startCounsel('love')"><span class="me">💑</span><div class="mn">恋愛</div><div class="mc-bar"><div class="mc-fill" id="mb-love" style="width:30%;background:linear-gradient(90deg,#FD79A8,#e84393)"></div></div></div>
-      <div class="mc" onclick="startCounsel('body')"><span class="me">💪</span><div class="mn">健康</div><div class="mc-bar"><div class="mc-fill" id="mb-body" style="width:70%;background:linear-gradient(90deg,#FFD166,#e17055)"></div></div></div>
-      <div class="mc" onclick="startCounsel('money')"><span class="me">💰</span><div class="mn">お金</div><div class="mc-bar"><div class="mc-fill" id="mb-money" style="width:20%;background:linear-gradient(90deg,#FF6B6B,#d63031)"></div></div></div>
-      <div class="mc" onclick="startCounsel('family')"><span class="me">🏠</span><div class="mn">家族</div><div class="mc-bar"><div class="mc-fill" id="mb-family" style="width:55%;background:linear-gradient(90deg,#74b9ff,#0984e3)"></div></div></div>
-      <div class="mc" onclick="startCounsel('lgbtq')"><span class="me">🌈</span><div class="mn">LGBTQ+</div><div class="mc-bar"><div class="mc-fill" id="mb-lgbtq" style="width:40%;background:linear-gradient(90deg,#fd79a8,#a29bfe)"></div></div></div>
-      <div class="mc" onclick="startCounsel('education')"><span class="me">📚</span><div class="mn">学習</div><div class="mc-bar"><div class="mc-fill" id="mb-education" style="width:50%;background:linear-gradient(90deg,#55efc4,#00b894)"></div></div></div>
-      <div class="mc" onclick="startCounsel('beauty')"><span class="me">💄</span><div class="mn">美容</div><div class="mc-bar"><div class="mc-fill" id="mb-beauty" style="width:65%;background:linear-gradient(90deg,#fd79a8,#e17055)"></div></div></div>
-      <div class="mc" onclick="startCounsel('nutrition')"><span class="me">🥗</span><div class="mn">栄養</div><div class="mc-bar"><div class="mc-fill" id="mb-nutrition" style="width:58%;background:linear-gradient(90deg,#55efc4,#00cec9)"></div></div></div>
-      <div class="mc" onclick="startCounsel('mindfulness')"><span class="me">🌿</span><div class="mn">マインドフル</div><div class="mc-bar"><div class="mc-fill" id="mb-mindfulness" style="width:35%;background:linear-gradient(90deg,#52B788,#0A8A78)"></div></div></div>
-      <div class="mc" onclick="startCounsel('senior')"><span class="me">👴</span><div class="mn">介護</div><div class="mc-bar"><div class="mc-fill" id="mb-senior" style="width:42%;background:linear-gradient(90deg,#74b9ff,#6c5ce7)"></div></div></div>
+    <div class="sess-bar" id="sessBar">
+      <span id="sessBarTxt">🌿 無料相談: 残り5回</span>
+      <button onclick="showPaywall()" style="background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);border:none;border-radius:50px;padding:4px 12px;font:700 10.5px/1 var(--sans);cursor:pointer;" data-i="upgrade_btn">プレミアムへ</button>
+    </div>
+    <p class="sec-lbl" data-i="home_menu">メニュー</p>
+    <div style="padding:0 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div class="qcard" style="cursor:pointer;text-align:center;" onclick="go('counsel')">
+        <div style="font-size:36px;margin-bottom:8px;">💬</div>
+        <div style="font-size:13px;font-weight:700;" data-i="menu_counsel">ハルに相談</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;" data-i="menu_counsel_sub">AIカウンセラー</div>
+      </div>
+      <div class="qcard" style="cursor:pointer;text-align:center;" onclick="go('experts')">
+        <div style="font-size:36px;margin-bottom:8px;">👥</div>
+        <div style="font-size:13px;font-weight:700;" data-i="menu_experts">カウンセラー</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;" data-i="menu_experts_sub">専門家を探す</div>
+      </div>
     </div>
     <div class="quest-wrap">
       <div class="qcard">
-        <div class="qhd"><span class="qbadge">⚡ デイリークエスト</span><span class="qtitle">今日のチャレンジ</span></div>
-        <div class="qi" id="q1" onclick="completeQ('q1',50)"><div class="qchk" id="qc1"></div><span class="qtxt">AIカウンセラーに話しかける</span><span class="qxp">+50 XP</span></div>
-        <div class="qi" id="q2" onclick="completeQ('q2',30)"><div class="qchk" id="qc2"></div><span class="qtxt">専門家一覧をチェックする</span><span class="qxp">+30 XP</span></div>
-        <div class="qi" id="q3" onclick="completeQ('q3',20)"><div class="qchk" id="qc3"></div><span class="qtxt">今日の気持ちを1文書く</span><span class="qxp">+20 XP</span></div>
+        <div class="qhd"><span class="qbadge">⚡ DAILY</span><span class="qtitle" data-i="quest_title">今日のチャレンジ</span></div>
+        <div class="qi" id="q1" onclick="completeQ('q1',50)"><div class="qchk" id="qc1"></div><span class="qtxt" data-i="q1_txt">ハルに話しかける</span><span class="qxp">+50 XP</span></div>
+        <div class="qi" id="q2" onclick="completeQ('q2',30)"><div class="qchk" id="qc2"></div><span class="qtxt" data-i="q2_txt">カウンセラー一覧をチェック</span><span class="qxp">+30 XP</span></div>
+        <div class="qi" id="q3" onclick="completeQ('q3',20)"><div class="qchk" id="qc3"></div><span class="qtxt" data-i="q3_txt">今日の気持ちを1文書く</span><span class="qxp">+20 XP</span></div>
       </div>
     </div>
-    <div class="match-btn-wrap">
-      <button class="match-btn" onclick="startMatch()">🔍 専門家をマッチングしてもらう</button>
+    <div style="padding:0 18px;margin-bottom:20px;">
+      <div class="qcard">
+        <div style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.8;" data-i="about_text">
+          WellMatchは尼崎市の皆さんのこころの悩みに寄り添うサービスです。AIカウンセラーのハルがいつでも話を聞きます。さらに専門的なサポートが必要な時は、プロのカウンセラーをご紹介します。
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- EXPERTS -->
+<!-- EXPERTS / COUNSELORS -->
 <div class="screen" id="s-experts">
   <div class="exp-scroll">
-    <div class="filter-row">
-      <button class="fbtn active" onclick="filterExp('all',this)">すべて</button>
-      <button class="fbtn" onclick="filterExp('mental',this)">🧠 メンタル</button>
-      <button class="fbtn" onclick="filterExp('fitness',this)">💪 フィットネス</button>
-      <button class="fbtn" onclick="filterExp('money',this)">💰 ライフプラン</button>
-      <button class="fbtn" onclick="filterExp('education',this)">🎓 教育</button>
-      <button class="fbtn" onclick="filterExp('nutrition',this)">🥗 栄養</button>
-      <button class="fbtn" onclick="filterExp('lgbtq',this)">🌈 LGBTQ+</button>
-      <button class="fbtn" onclick="filterExp('beauty',this)">💄 美容</button>
-      <button class="fbtn" onclick="filterExp('senior',this)">👴 介護</button>
+    <div style="padding:16px 18px 10px;">
+      <h2 style="font-family:var(--serif);font-size:20px;margin-bottom:4px;" data-i="exp_title">カウンセラー一覧</h2>
+      <p style="font-size:12px;color:var(--g6);" data-i="exp_sub">尼崎で活躍する専門カウンセラー</p>
     </div>
     <div class="exp-list" id="expList"></div>
   </div>
 </div>
 
-<!-- COUNSEL -->
+<!-- COUNSEL / CHAT -->
 <div class="screen" id="s-counsel">
   <div class="counsel-wrap">
     <div class="chd">
       <div class="chd-top">
         <button class="back-circle" onclick="go('home')">←</button>
-        <div><div class="ct-name" id="ctName">🧠 メンタルヘルス相談</div><div class="ct-sub">AIカウンセラー ハル</div></div>
-        <div class="online"><div class="ondot"></div><span class="ontxt">オンライン</span></div>
-      </div>
-      <div class="ftabs">
-        <button class="ftab active" onclick="switchField('mental',this)">🧠 メンタル</button>
-        <button class="ftab" onclick="switchField('work',this)">💼 仕事</button>
-        <button class="ftab" onclick="switchField('love',this)">💑 恋愛</button>
-        <button class="ftab" onclick="switchField('body',this)">💪 健康</button>
-        <button class="ftab" onclick="switchField('money',this)">💰 お金</button>
-        <button class="ftab" onclick="switchField('family',this)">🏠 家族</button>
-        <button class="ftab" onclick="switchField('lgbtq',this)">🌈 LGBTQ+</button>
-        <button class="ftab" onclick="switchField('education',this)">📚 学習</button>
-        <button class="ftab" onclick="switchField('beauty',this)">💄 美容</button>
-        <button class="ftab" onclick="switchField('nutrition',this)">🥗 栄養</button>
-        <button class="ftab" onclick="switchField('mindfulness',this)">🌿 マインドフル</button>
-        <button class="ftab" onclick="switchField('senior',this)">👴 介護</button>
+        <div style="margin-left:8px;">
+          <div class="ct-name">🌿 <span data-i="haru_name">AIカウンセラー ハル</span></div>
+          <div class="ct-sub" data-i="haru_sub">WellMatch × 尼崎</div>
+        </div>
+        <div class="online"><div class="ondot"></div><span class="ontxt" data-i="online">オンライン</span></div>
       </div>
     </div>
+    <div class="chat-sess-info" id="chatSessInfo">無料相談: 残り5回</div>
     <div class="chat-area" id="chatArea"></div>
     <div class="inp-area">
-      <textarea class="cinp" id="chatInp" placeholder="話したいことを入力..."
+      <textarea class="cinp" id="chatInp" data-placeholder-i="chat_ph"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
         oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
       <button class="sbtn" id="sbtn" onclick="sendMsg()">↑</button>
@@ -541,32 +436,24 @@ select.inp{appearance:none;-webkit-appearance:none;}
   <div class="prof-scroll">
     <div class="phero">
       <div class="pav-lg" id="pavLg">😊</div>
-      <h2 class="pname" id="pname">明仁</h2>
-      <p class="ptype" id="ptype">ユーザー</p>
+      <h2 class="pname" id="pname">—</h2>
+      <p class="ptype" id="ptype" data-i="user_type">ユーザー</p>
       <div class="lv-wrap">
-        <div class="lv-lbl"><span>Lv.<span id="plv">1</span></span><span id="pxptxt">0 / 300 XP</span></div>
+        <div class="lv-lbl"><span>XP</span><span id="pxptxt">0 XP</span></div>
         <div class="lv-track"><div class="lv-fill" id="plvbar" style="width:0%"></div></div>
       </div>
+      <div id="plan-badge" style="display:inline-block;padding:5px 14px;border-radius:50px;font-size:11px;font-weight:700;background:rgba(82,183,136,.12);color:var(--g6);border:1px solid rgba(82,183,136,.22);">無料プラン</div>
     </div>
-    <p class="sec-lbl">実績バッジ 🏆</p>
+    <p class="sec-lbl" data-i="ach_title">実績バッジ 🏆</p>
     <div class="ach-grid" id="achGrid"></div>
     <div class="pmenu">
-      <div class="pmi" onclick="go('counsel')"><span class="pmico">💬</span><span class="pmtxt">AIカウンセリングを始める</span><span class="pmarr">›</span></div>
-      <div class="pmi" onclick="go('experts')"><span class="pmico">👥</span><span class="pmtxt">専門家一覧を見る</span><span class="pmarr">›</span></div>
-      <div class="pmi" onclick="logout()"><span class="pmico">🚪</span><span class="pmtxt">ログアウト</span><span class="pmarr">›</span></div>
+      <div class="pmi" onclick="go('counsel')"><span class="pmico">💬</span><span class="pmtxt" data-i="pm_counsel">ハルに相談する</span><span class="pmarr">›</span></div>
+      <div class="pmi" onclick="go('experts')"><span class="pmico">👥</span><span class="pmtxt" data-i="pm_experts">カウンセラーを探す</span><span class="pmarr">›</span></div>
+      <div class="pmi" onclick="showPaywall()"><span class="pmico">⭐</span><span class="pmtxt" data-i="pm_upgrade">プレミアムにアップグレード</span><span class="pmarr">›</span></div>
+      <div class="pmi" onclick="toggleLang()"><span class="pmico">🌐</span><span class="pmtxt" data-i="pm_lang">言語 / Language</span><span class="pmarr" id="langCurr">日本語</span></div>
+      <div class="pmi" onclick="logout()"><span class="pmico">🚪</span><span class="pmtxt" data-i="pm_logout">ログアウト</span><span class="pmarr">›</span></div>
     </div>
   </div>
-</div>
-
-<!-- MATCH -->
-<div class="screen" id="s-match">
-  <div class="match-orb"><div class="mo-ring"></div><div class="mo-ring2"></div><div class="mo-center" id="mico">🌿</div></div>
-  <p class="mstatus" id="mstat">ANALYZING...</p>
-  <h2 class="mtitle" id="mttl">専門家を探しています</h2>
-  <p class="msub" id="msub">AIがあなたのウェルネスマップを解析中</p>
-  <div class="mcards" id="mcards"></div>
-  <button class="mbtn" id="mbtn" onclick="go('experts')">マッチした専門家を見る →</button>
-  <button class="mbtn2" onclick="go('home')">ホームに戻る</button>
 </div>
 
 <!-- LEVEL UP -->
@@ -574,276 +461,598 @@ select.inp{appearance:none;-webkit-appearance:none;}
   <div class="lv-glow"><span class="lv-ico">⭐</span></div>
   <p class="lvbadge">LEVEL UP!</p>
   <h2 class="lvtitle" id="lvtitle">レベル2達成！</h2>
-  <p class="lvsub">あなたの心が少し強くなりました</p>
-  <div class="ach-list">
-    <div class="ali"><span class="ali-ico">🎯</span><div><div class="aln">はじめての相談</div><div class="ald">AIカウンセラーに初めて話しかけた</div></div></div>
-    <div class="ali"><span class="ali-ico">⚡</span><div><div class="aln">+100 XP 獲得！</div><div class="ald">次のレベルまであと200 XP</div></div></div>
-  </div>
-  <button class="btn btn-p" style="max-width:240px;margin-bottom:10px;" onclick="go('home')">冒険を続ける 🗺</button>
-  <button class="mbtn2" onclick="go('counsel')">もっと話す 💬</button>
+  <p class="lvsub" data-i="lv_sub">あなたの心が少し強くなりました</p>
+  <button class="btn btn-p" style="max-width:240px;margin-bottom:10px;" onclick="go('home')" data-i="lv_cont">続ける 🗺</button>
+  <button class="mbtn2" onclick="go('counsel')" data-i="lv_chat">もっと話す 💬</button>
 </div>
 
 <script>
-const experts=[
-  {id:1,name:'田中 美咲',role:'臨床心理士 / 公認心理師',emoji:'👩‍⚕️',cat:'mental',tags:['メンタルヘルス','不安・うつ','トラウマ'],price:'¥5,000/回',desc:'10年以上の臨床経験。「話を聞いてもらうだけで楽になった」と好評。',rating:'4.9',reviews:128,avail:true},
-  {id:2,name:'鈴木 健司',role:'NSCA認定パーソナルトレーナー',emoji:'💪',cat:'fitness',tags:['ダイエット','筋力アップ','オンライン指導'],price:'¥3,500/回',desc:'元プロアスリート。生活スタイルに合った無理のないプランを提案。',rating:'4.8',reviews:89,avail:true},
-  {id:3,name:'佐藤 由美',role:'ライフプランナー / FP2級',emoji:'💰',cat:'money',tags:['老後設計','保険','住宅ローン'],price:'¥4,000/回',desc:'元ハウスメーカー勤務。お金の不安を一緒に整理して明るい未来を設計。',rating:'4.9',reviews:64,avail:true,isNew:true},
-  {id:4,name:'山田 誠',role:'家庭教師 / 元公立高校教師',emoji:'🎓',cat:'education',tags:['小中高','受験対策','不登校支援'],price:'¥2,800/回',desc:'20年の教育経験。勉強が苦手な子でも楽しく学べる授業が得意。',rating:'4.7',reviews:156,avail:true,isNew:true},
-  {id:5,name:'中村 彩香',role:'管理栄養士',emoji:'🥗',cat:'nutrition',tags:['ダイエット食','生活習慣病','離乳食'],price:'¥3,000/回',desc:'病院・クリニック勤務を経て独立。好みに合った食事プランを作成。',rating:'4.8',reviews:72,avail:false},
-  {id:6,name:'伊藤 大輔',role:'産業カウンセラー / キャリアコーチ',emoji:'👨‍💼',cat:'mental',tags:['職場の悩み','転職','燃え尽き症候群'],price:'¥4,500/回',desc:'大手企業のキャリア支援を10年担当。仕事の悩みを整理して次のステップへ。',rating:'4.6',reviews:43,avail:true},
-  {id:7,name:'橋本 さくら',role:'LGBTQ+専門カウンセラー',emoji:'🌈',cat:'lgbtq',tags:['LGBTQ+','アイデンティティ','多様性'],price:'¥4,000/回',desc:'当事者として10年以上活動。どんなアイデンティティも否定せず安心して話せる。',rating:'5.0',reviews:37,avail:true,isNew:true},
-  {id:8,name:'松本 あおい',role:'ビューティーカウンセラー',emoji:'💄',cat:'beauty',tags:['スキンケア','ボディケア','外見の悩み'],price:'¥3,000/回',desc:'大手エステサロンで10年のキャリア。外見の悩みを内面から整えるアドバイスが得意。',rating:'4.7',reviews:55,avail:true},
-  {id:9,name:'川口 禅',role:'マインドフルネス指導者 / ヨガ講師',emoji:'🌿',cat:'fitness',tags:['瞑想','ヨガ','ストレス管理'],price:'¥3,200/回',desc:'インド・タイで修行を積んだ専門家。心と体の両面から整える指導が得意。',rating:'4.9',reviews:73,avail:true},
-  {id:10,name:'野田 きよ子',role:'介護福祉士 / シニアカウンセラー',emoji:'👴',cat:'senior',tags:['介護疲れ','老後設計','親の介護'],price:'¥3,500/回',desc:'30年の介護現場経験。介護する側・される側、両方に寄り添ったアドバイス。',rating:'4.8',reviews:48,avail:true,isNew:true},
-  {id:11,name:'木村 健太',role:'管理栄養士 / ダイエットコーチ',emoji:'🥗',cat:'nutrition',tags:['食事制限','ダイエット','生活習慣病'],price:'¥2,800/回',desc:'スポーツ選手の栄養管理も担当。無理なく続けられる食事プランで体質改善。',rating:'4.8',reviews:91,avail:true},
-  {id:12,name:'森 誠一郎',role:'不登校支援専門家 / 元教師',emoji:'📚',cat:'education',tags:['不登校','学習障害','進路相談'],price:'¥3,000/回',desc:'元小学校教師。不登校の子どもと保護者を15年支援。学校以外の選択肢も一緒に考えます。',rating:'4.9',reviews:62,avail:true},
-];
+// ============================================================
+// CONFIG — ここを実際の値に置き換える
+// ============================================================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const WORKER_URL = 'https://wellmatch-api.mia-rockenry.workers.dev';
+const STRIPE_KEY = 'YOUR_STRIPE_PUBLISHABLE_KEY';
+const FREE_LIMIT = 5;
 
-const fieldCfg={
-  mental:{name:'🧠 メンタルヘルス相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方（「〜だね」「〜かな」）で話します。まず相手の話をとことん聴いて、共感することに徹してください。アドバイスや提案は絶対にしないでください。相手からリクエストがあるか、5回以上会話を重ねた後に初めて軽く提案してもいいです。一度に一つだけ質問する。短めの返答で余白を大切に。「それは辛かったね」「そうなんだね」など共感の言葉を必ず入れる。解決しようとしない、ただ寄り添う。絵文字は🌿☀️🌸など自然系を時々使う。アドバイスや診断・医療的な発言は禁止。長文で一気に話しすぎないこと。'},
-  work:{name:'💼 仕事・キャリア相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。仕事・転職・職場の悩みに共感しながら日本語で対話してください。まず聴くことを優先し、アドバイスは求められてから。'},
-  love:{name:'💑 恋愛・人間関係相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。判断せず温かく寄り添いながら日本語で対話してください。まず聴くことを優先し、アドバイスは求められてから。'},
-  body:{name:'💪 健康・ウェルネス相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。医療行為は行わず、生活改善の視点から日本語で寄り添ってください。まず聴くことを優先し、アドバイスは求められてから。'},
-  money:{name:'💰 お金・ライフプラン相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。お金への不安に共感しながら、感情面から整理する対話を日本語でしてください。まず聴くことを優先し、アドバイスは求められてから。'},
-  family:{name:'🏠 家族・育児相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。家族・育児・親子関係の悩みに共感しながら日本語で対話してください。まず聴くことを優先し、アドバイスは求められてから。'},
-  lgbtq:{name:'🌈 多様性・LGBTQ+相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。アイデンティティ・性的指向に関する悩みに判断せず完全に寄り添って日本語で対話してください。まず聴くことを優先し、アドバイスは求められてから。'},
-  education:{name:'📚 学習・不登校相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。勉強・不登校・進路の悩みに共感しながら日本語で対話してください。まず聴くことを優先し、アドバイスは求められてから。'},
-  beauty:{name:'💄 美容・ボディケア相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。外見に関する悩みに寄り添いながら日本語でしてください。まず聴くことを優先し、アドバイスは求められてから。'},
-  nutrition:{name:'🥗 食事・栄養相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。食事・ダイエットの悩みに共感しながら日本語で寄り添ってください。まず聴くことを優先し、アドバイスは求められてから。'},
-  mindfulness:{name:'🌿 マインドフルネス相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。瞑想・ストレス管理の悩みに穏やかなトーンで日本語で対話してください。まず聴くことを優先し、アドバイスは求められてから。'},
-  senior:{name:'👴 介護・シニア相談',sys:'あなたはWellMatchのAIカウンセラー「ハル」です。フレンドリーで親しみやすい話し方で話します。介護疲れ・老後の不安に共感しながら日本語でしてください。まず聴くことを優先し、アドバイスは求められてから。'},
+// ============================================================
+// i18n
+// ============================================================
+const T = {
+  ja: {
+    sp_tag:'尼崎のこころのサポート', sp_desc:'AIカウンセラー「ハル」がいつでも寄り添います。必要なときは、専門のカウンセラーにつなぎます。',
+    sp_start:'はじめる →', sp_demo:'ログインせずに体験する', back:'戻る',
+    tab_register:'新規登録', tab_login:'ログイン',
+    lbl_email:'メールアドレス', lbl_pass:'パスワード', ph_email:'your@email.com', ph_pass:'6文字以上',
+    btn_register:'登録して始める ✨', btn_login:'ログイン',
+    auth_note:'完全匿名・本名不要 / いつでも退会可能',
+    nav_home:'ホーム', nav_experts:'カウンセラー', nav_counsel:'相談', nav_profile:'マイページ',
+    stat_left:'残り無料', stat_streak:'日連続',
+    upgrade_btn:'プレミアムへ', home_menu:'メニュー',
+    menu_counsel:'ハルに相談', menu_counsel_sub:'AIカウンセラー',
+    menu_experts:'カウンセラー', menu_experts_sub:'専門家を探す',
+    quest_title:'今日のチャレンジ', q1_txt:'ハルに話しかける', q2_txt:'カウンセラー一覧をチェック', q3_txt:'今日の気持ちを1文書く',
+    about_text:'WellMatchは尼崎市の皆さんのこころの悩みに寄り添うサービスです。AIカウンセラーのハルがいつでも話を聞きます。さらに専門的なサポートが必要な時は、プロのカウンセラーをご紹介します。',
+    exp_title:'カウンセラー一覧', exp_sub:'尼崎で活躍する専門カウンセラー',
+    haru_name:'AIカウンセラー ハル', haru_sub:'WellMatch × 尼崎', online:'オンライン',
+    chat_ph:'話したいことを入力...', chatSessInfo_free:'無料相談: 残り{n}回', chatSessInfo_premium:'⭐ プレミアム — 無制限',
+    user_type:'ユーザー', ach_title:'実績バッジ 🏆',
+    pm_counsel:'ハルに相談する', pm_experts:'カウンセラーを探す', pm_upgrade:'プレミアムにアップグレード', pm_lang:'言語 / Language', pm_logout:'ログアウト',
+    pw_title:'無料の相談が終わったよ', pw_desc:'5回の無料相談をありがとう🌿\n続けるにはプレミアムプランへ。',
+    pw_sub:'/ 月　無制限でハルと相談', pw_cta:'プレミアムを始める', pw_alt:'専門カウンセラーに相談する', pw_skip:'あとで決める',
+    match_msg_label:'メッセージ（任意）', match_msg_ph:'相談したい内容を簡単にご記入ください', match_submit:'相談を申し込む', cancel:'キャンセル',
+    lv_sub:'あなたの心が少し強くなりました', lv_cont:'続ける 🗺', lv_chat:'もっと話す 💬',
+    sessBar_free:'🌿 無料相談: 残り{n}回', sessBar_premium:'⭐ プレミアム会員 — 無制限',
+    plan_free:'無料プラン', plan_premium:'⭐ プレミアム会員',
+    book:'相談する', book_unavail:'空き待ち',
+    toast_match:'申し込みを送りました！', toast_xp:'+{n} XP ✨', toast_welcome:'ようこそ 🌿',
+    toast_demo:'デモモードで体験中', toast_ach:'🏆 実績解除：{n}',
+    toast_stripe:'Stripe設定後に有効になります',
+    greet_morning:'おはようございます ☀️', greet_noon:'こんにちは 🌿', greet_eve:'おつかれさまです 🌙', greet_night:'こんばんは 🌙',
+    demo_replies:['そうなんだね。もう少し聞かせてくれる？','それは辛かったね。一人で抱えてたんだね。','その不安、わかるよ。同じように感じてる人、多いんだよね。','なるほど。どんなことが一番気になってる？','話してくれてありがとう。一緒に考えよう。','その状況、誰でも辛く感じると思う。'],
+    haru_welcome:'こんにちは！AIカウンセラーのハルだよ🌿\n\nどんな小さなことでも、遠慮なく話してね。',
+    err_email:'メールアドレスを入力してください', err_pass:'パスワードは6文字以上で入力してください',
+    err_auth:'メールまたはパスワードが正しくありません',
+    langLabel:'日本語',
+  },
+  en: {
+    sp_tag:'Mental Wellness for Amagasaki', sp_desc:'AI counselor "Haru" is always here for you.\nWe connect you with a professional when needed.',
+    sp_start:'Get started →', sp_demo:'Try without signing in', back:'Back',
+    tab_register:'Sign up', tab_login:'Log in',
+    lbl_email:'Email address', lbl_pass:'Password', ph_email:'your@email.com', ph_pass:'6+ characters',
+    btn_register:'Create account ✨', btn_login:'Log in',
+    auth_note:'Completely anonymous · Cancel anytime',
+    nav_home:'Home', nav_experts:'Counselors', nav_counsel:'Chat', nav_profile:'Profile',
+    stat_left:'Free left', stat_streak:'Day streak',
+    upgrade_btn:'Go Premium', home_menu:'Menu',
+    menu_counsel:'Talk to Haru', menu_counsel_sub:'AI Counselor',
+    menu_experts:'Counselors', menu_experts_sub:'Find a professional',
+    quest_title:"Today's challenges", q1_txt:'Talk to Haru', q2_txt:'Check counselor list', q3_txt:'Write how you feel today',
+    about_text:'WellMatch helps Amagasaki residents talk about mental wellness. Haru, our AI counselor, is always ready to listen. We connect you with professional counselors when you need deeper support.',
+    exp_title:'Counselors', exp_sub:'Professional counselors in Amagasaki',
+    haru_name:'AI Counselor Haru', haru_sub:'WellMatch × Amagasaki', online:'Online',
+    chat_ph:'Type anything you want to share...', chatSessInfo_free:'Free sessions: {n} left', chatSessInfo_premium:'⭐ Premium — Unlimited',
+    user_type:'User', ach_title:'Achievements 🏆',
+    pm_counsel:'Talk to Haru', pm_experts:'Find a counselor', pm_upgrade:'Upgrade to Premium', pm_lang:'言語 / Language', pm_logout:'Log out',
+    pw_title:'Free sessions used up', pw_desc:"Thanks for using WellMatch 🌿\nUpgrade to continue with Haru.",
+    pw_sub:'/ month · Unlimited AI sessions', pw_cta:'Start Premium', pw_alt:'Talk to a professional', pw_skip:'Maybe later',
+    match_msg_label:'Message (optional)', match_msg_ph:'Briefly describe what you want to discuss', match_submit:'Request session', cancel:'Cancel',
+    lv_sub:'Your heart grew a little stronger', lv_cont:'Keep going 🗺', lv_chat:'Talk more 💬',
+    sessBar_free:'🌿 Free sessions: {n} left', sessBar_premium:'⭐ Premium member — Unlimited',
+    plan_free:'Free plan', plan_premium:'⭐ Premium member',
+    book:'Book', book_unavail:'Waitlist',
+    toast_match:'Request sent!', toast_xp:'+{n} XP ✨', toast_welcome:'Welcome 🌿',
+    toast_demo:'Demo mode', toast_ach:'🏆 Achievement: {n}',
+    toast_stripe:'Available after Stripe setup',
+    greet_morning:'Good morning ☀️', greet_noon:'Hello 🌿', greet_eve:'Good evening 🌙', greet_night:'Good night 🌙',
+    demo_replies:["I hear you. Can you tell me more?","That sounds really tough. You've been carrying this alone.","That makes sense. A lot of people feel the same way.","I understand. What's been bothering you the most?","Thanks for sharing. Let's work through this together.","Anyone would find that difficult."],
+    haru_welcome:"Hi, I'm Haru 🌿\n\nFeel free to share anything on your mind. I'm here to listen.",
+    err_email:'Please enter your email', err_pass:'Password must be at least 6 characters',
+    err_auth:'Incorrect email or password',
+    langLabel:'English',
+  }
+};
+let lang = 'ja';
+function t(key, vars={}) {
+  let str = (T[lang]||T.ja)[key] || (T.ja[key]) || key;
+  for(const [k,v] of Object.entries(vars)) str = str.replace(`{${k}}`, v);
+  return str;
+}
+function applyLang() {
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const key = el.getAttribute('data-i');
+    el.textContent = t(key);
+  });
+  document.querySelectorAll('[data-placeholder-i]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-placeholder-i'));
+  });
+  document.getElementById('langBtn').textContent = lang==='ja' ? 'EN' : 'JP';
+  document.getElementById('langCurr').textContent = t('langLabel');
+  updateSessBar();
+  updateChatSessInfo();
+}
+function toggleLang() { lang = lang==='ja' ? 'en' : 'ja'; applyLang(); }
+
+// ============================================================
+// STATE
+// ============================================================
+let SB = null; // supabase client
+let S = {
+  user: null, profile: null, demoMode: false,
+  xp: 0, streak: 1, msgCount: 0, history: [],
+  questDone: new Set(), achEarned: new Set(),
+  currentSupporterId: null,
 };
 
-const demoRes=['そうなんだね。もう少し聞かせてくれる？','それは辛かったね。一人で抱えてたんだね。','その不安、わかるよ。同じように感じてる人、多いんだよね。','なるほど。どんなことが一番気になってる？','話してくれてありがとう。一緒に考えよう。','その状況、誰でも辛く感じると思う。'];
+const HARU_SYSTEM = `あなたはWellMatchのAIカウンセラー「ハル」です。尼崎市に住む人々のこころの悩みに寄り添います。
+フレンドリーで親しみやすい話し方（「〜だね」「〜かな」）で話します。
+まず相手の話をとことん聴いて、共感することに徹してください。
+アドバイスや提案は絶対にしないでください。相手からリクエストがあるか、5回以上会話を重ねた後に初めて軽く提案してもいいです。
+一度に一つだけ質問する。短めの返答で余白を大切に。
+「それは辛かったね」「そうなんだね」など共感の言葉を必ず入れる。
+解決しようとしない、ただ寄り添う。絵文字は🌿☀️🌸など自然系を時々使う。
+緊急の場合（自傷・自殺念慮など）は、いのちの電話（0120-783-556）を案内する。
+アドバイスや診断・医療的な発言は禁止。長文で一気に話しすぎないこと（150〜250文字程度）。`;
 
-const allAch=[
-  {id:'first_talk',icon:'💬',name:'はじめの一歩',desc:'初めて相談した'},
-  {id:'level2',icon:'⭐',name:'成長中',desc:'レベル2に到達'},
-  {id:'expert_check',icon:'👥',name:'専門家探し',desc:'専門家一覧を見た'},
-  {id:'matched',icon:'🎯',name:'マッチング体験',desc:'マッチングを体験'},
-  {id:'quest_all',icon:'⚡',name:'全クエスト制覇',desc:'全クエストをクリア'},
-  {id:'streak',icon:'🔥',name:'継続の力',desc:'3日連続ログイン'},
+const HARU_SYSTEM_EN = `You are "Haru", WellMatch's AI counselor. You support people in Amagasaki, Japan with their mental wellness.
+Be warm, friendly, and conversational. 
+Listen deeply first — empathize before anything else. Do NOT give advice unless the user asks for it or you've exchanged 5+ messages.
+Ask only one question at a time. Keep responses concise and leave space.
+Use natural empathetic phrases like "That sounds really hard" or "I hear you."
+Don't try to fix things — just be present. Use emojis like 🌿☀️🌸 occasionally.
+If there are signs of self-harm or crisis, provide the crisis line: Inochi no Denwa 0120-783-556.
+No medical advice or diagnoses. Keep replies to 1-3 sentences.`;
+
+const counselors = [
+  {id:1,name:'田中 みどり',nameEn:'Midori Tanaka',role:'臨床心理士・カウンセラー',roleEn:'Clinical Psychologist',emoji:'👩‍⚕️',
+   tags:['不安・緊張','うつ','人間関係'],tagsEn:['Anxiety','Depression','Relationships'],
+   price:'¥5,000',desc:'尼崎市在住15年。不安・うつ・人間関係のお悩みを専門に、丁寧なカウンセリングを提供しています。',
+   descEn:'15 years in Amagasaki. Specializes in anxiety, depression, and interpersonal issues.',
+   rating:'4.9',reviews:128,avail:true},
+  {id:2,name:'佐藤 健太',nameEn:'Kenta Sato',role:'産業カウンセラー',roleEn:'Industrial Counselor',emoji:'👨‍💼',
+   tags:['仕事・職場','ストレス','ハラスメント'],tagsEn:['Workplace','Stress','Harassment'],
+   price:'¥4,500',desc:'職場のストレス、ハラスメント問題、キャリアの悩みなど、働くことに関する相談が得意です。',
+   descEn:'Expert in work-related stress, harassment, and career concerns.',
+   rating:'4.8',reviews:89,avail:true},
+  {id:3,name:'山本 さくら',nameEn:'Sakura Yamamoto',role:'メンタルヘルスケアコーチ',roleEn:'Mental Health Coach',emoji:'👩‍👧',
+   tags:['家族・夫婦','子育て','オンライン対応'],tagsEn:['Family','Parenting','Online'],
+   price:'¥3,500',desc:'子育て・家族関係・夫婦間の悩みをオンラインでサポート。話しやすい雰囲気を大切にしています。',
+   descEn:'Online support for parenting, family dynamics, and relationship concerns.',
+   rating:'4.9',reviews:64,avail:true},
 ];
 
-let S={user:null,demoMode:false,xp:0,level:1,streak:1,field:'mental',msgCount:0,history:[],questDone:new Set(),achEarned:new Set(),isPaid:false,isExpert:false};
+const allAch = [
+  {id:'first_talk',icon:'💬',name:'はじめの一歩',nameEn:'First Step',desc:'初めて相談した'},
+  {id:'expert_check',icon:'👥',name:'専門家探し',nameEn:'Explorer',desc:'カウンセラー一覧を見た'},
+  {id:'quest_all',icon:'⚡',name:'全クエスト制覇',nameEn:'Quest Master',desc:'全クエストをクリア'},
+  {id:'premium',icon:'⭐',name:'プレミアム会員',nameEn:'Premium',desc:'プレミアムに登録した'},
+  {id:'matched',icon:'🤝',name:'マッチング申込',nameEn:'Matched',desc:'カウンセラーに申し込んだ'},
+  {id:'streak3',icon:'🔥',name:'3日連続',nameEn:'On a Roll',desc:'3日連続でログイン'},
+];
 
-function showErr(id,show){document.getElementById(id).style.display=show?'block':'none';}
-
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s-'+id)?.classList.add('active');
-  const isMain=['home','experts','counsel','profile','match','lv','expert-home'].includes(id);
-  document.getElementById('topbar').classList.toggle('on',isMain&&id!=='counsel');
-  document.getElementById('bottomnav').classList.toggle('on',['home','experts','counsel','profile'].includes(id));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  document.getElementById('nb-'+id)?.classList.add('active');
-  if(id==='experts')renderExperts('all');
-  if(id==='profile')renderProfile();
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  applyLang();
+  if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    SB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { data: { session } } = await SB.auth.getSession();
+    if (session) {
+      S.user = session.user;
+      await loadProfile();
+      initApp();
+      return;
+    }
+  }
+  go('splash');
 }
 
-function switchAuth(tab,el){
+async function loadProfile() {
+  if (!SB || !S.user) return;
+  const { data } = await SB.from('users').select('*').eq('id', S.user.id).single();
+  if (data) {
+    S.profile = data;
+  } else {
+    const { data: np } = await SB.from('users').insert({
+      id: S.user.id, email: S.user.email,
+      free_sessions_used: 0, is_premium: false
+    }).select().single();
+    S.profile = np;
+  }
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function switchAuth(tab, el) {
   document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active'));
   document.getElementById('a-'+tab).classList.add('active');
+  document.getElementById('auth-global-err').style.display = 'none';
 }
 
-function register(){
-  const name=document.getElementById('rname').value.trim();
-  const pass=document.getElementById('rpass').value;
-  const pass2=document.getElementById('rpass2').value;
-  let ok=true;
-  if(!name){showErr('rname-err',true);ok=false;}else{showErr('rname-err',false);}
-  if(pass.length<6){showErr('rpass-err',true);ok=false;}else{showErr('rpass-err',false);}
-  if(pass!==pass2){showErr('rpass2-err',true);ok=false;}else{showErr('rpass2-err',false);}
-  if(!ok)return;
-  S.user={name,type:'ユーザー'};S.isExpert=false;initApp();
+function showAuthErr(msg) {
+  const el = document.getElementById('auth-global-err');
+  el.textContent = msg; el.style.display = 'block';
 }
 
-function login(){
-  const name=document.getElementById('lname').value.trim();
-  const pass=document.getElementById('lpass').value;
-  let ok=true;
-  if(!name){showErr('lname-err',true);ok=false;}else{showErr('lname-err',false);}
-  if(!pass){showErr('lpass-err',true);ok=false;}else{showErr('lpass-err',false);}
-  if(!ok)return;
-  S.user={name,type:'ユーザー'};S.isExpert=false;initApp();
+async function register() {
+  const email = document.getElementById('rEmail').value.trim();
+  const pass = document.getElementById('rPass').value;
+  if (!email) { showAuthErr(t('err_email')); return; }
+  if (pass.length < 6) { showAuthErr(t('err_pass')); return; }
+  showAuthErr('');
+
+  if (!SB) { demoLogin(); return; }
+  const { data, error } = await SB.auth.signUp({ email, password: pass });
+  if (error) { showAuthErr(error.message); return; }
+  S.user = data.user;
+  await loadProfile();
+  initApp();
 }
 
-function demoLogin(){S.user={name:'ゲスト',type:'ユーザー'};S.isExpert=false;initApp();}
+async function login() {
+  const email = document.getElementById('lEmail').value.trim();
+  const pass = document.getElementById('lPass').value;
+  if (!email) { showAuthErr(t('err_email')); return; }
+  if (!pass) { showAuthErr(t('err_pass')); return; }
 
-function toggleTag(el){el.classList.toggle('active');}
-
-function registerExpert(){
-  const name=document.getElementById('ename').value.trim();
-  const pass=document.getElementById('epass').value;
-  const pass2=document.getElementById('epass2').value;
-  const bio=document.getElementById('ebio').value.trim();
-  const price=document.getElementById('eprice').value.trim();
-  const tags=[...document.querySelectorAll('#expertTags .tag-btn.active')].map(b=>b.textContent.trim());
-  let ok=true;
-  if(!name){showErr('ename-err',true);ok=false;}else{showErr('ename-err',false);}
-  if(pass.length<6){showErr('epass-err',true);ok=false;}else{showErr('epass-err',false);}
-  if(pass!==pass2){showErr('epass2-err',true);ok=false;}else{showErr('epass2-err',false);}
-  if(tags.length===0){showErr('etags-err',true);ok=false;}else{showErr('etags-err',false);}
-  if(!bio){showErr('ebio-err',true);ok=false;}else{showErr('ebio-err',false);}
-  if(!price){showErr('eprice-err',true);ok=false;}else{showErr('eprice-err',false);}
-  if(!ok)return;
-  S.user={name,type:'expert',bio,price,tags};S.isExpert=true;
-  document.getElementById('expName').textContent=name;
-  document.getElementById('expTagsDisp').textContent=tags.slice(0,2).join(' / ');
-  document.getElementById('topbar').classList.add('on');
-  go('expert-home');
-  showToast('専門家として登録しました！ 🌿');
+  if (!SB) { demoLogin(); return; }
+  const { data, error } = await SB.auth.signInWithPassword({ email, password: pass });
+  if (error) { showAuthErr(t('err_auth')); return; }
+  S.user = data.user;
+  await loadProfile();
+  initApp();
 }
 
-function logout(){
-  S={...S,user:null,xp:0,level:1,msgCount:0,questDone:new Set(),achEarned:new Set(),isPaid:false,isExpert:false};
+function demoLogin() {
+  S.demoMode = true;
+  S.user = { id: 'demo', email: 'demo@wellmatch.jp' };
+  S.profile = { free_sessions_used: 0, is_premium: false };
+  initApp();
+  showToast(t('toast_demo'));
+}
+
+async function logout() {
+  if (SB) await SB.auth.signOut();
+  S = { user:null, profile:null, demoMode:false, xp:0, streak:1, msgCount:0, history:[], questDone:new Set(), achEarned:new Set(), currentSupporterId:null };
   go('splash');
   document.getElementById('topbar').classList.remove('on');
   document.getElementById('bottomnav').classList.remove('on');
 }
 
-function initApp(){
-  const h=new Date().getHours();
-  const greet=h<6?'こんばんは 🌙':h<11?'おはようございます ☀️':h<17?'こんにちは 🌿':'おつかれさまです 🌙';
-  document.getElementById('hgreet').textContent=greet;
-  document.getElementById('hname').textContent=S.user.name+'さん';
-  document.getElementById('pname').textContent=S.user.name;
-  document.getElementById('ptype').textContent=S.user.type;
-  document.getElementById('topAv').textContent='😊';
-  document.getElementById('pavLg').textContent='😊';
-  animBars();renderAchievements();updateStats();
-  go('home');showToast('ようこそ、'+S.user.name+'さん！ 🌿');
+// ============================================================
+// APP INIT
+// ============================================================
+function initApp() {
+  updateGreeting();
+  updateStats();
+  renderAchievements();
+  renderExperts();
+  go('home');
+  showToast(t('toast_welcome'));
 }
 
-function addXP(n){
-  S.xp+=n;updateStats();showToast('+'+n+' XP ✨');
-  if(S.xp>=100&&S.level===1){S.level=2;earnAch('level2');setTimeout(()=>go('lv'),1000);}
+function updateGreeting() {
+  const h = new Date().getHours();
+  const greet = h<6 ? t('greet_night') : h<11 ? t('greet_morning') : h<17 ? t('greet_noon') : t('greet_eve');
+  document.getElementById('hgreet').textContent = greet;
+  const email = S.user?.email || '';
+  const name = email.split('@')[0] || 'ゲスト';
+  document.getElementById('hname').textContent = name + 'さん';
+  document.getElementById('pname').textContent = name;
 }
-function updateStats(){
-  ['xpV','sxp'].forEach(id=>document.getElementById(id).textContent=S.xp);
-  ['lvV','slv'].forEach(id=>document.getElementById(id).textContent=S.level);
-  document.getElementById('sstr').textContent=S.streak;
-  document.getElementById('plv').textContent=S.level;
-  document.getElementById('pxptxt').textContent=S.xp+' / 300 XP';
-  document.getElementById('plvbar').style.width=Math.min(S.xp/3,100)+'%';
+
+function updateStats() {
+  document.getElementById('sxp').textContent = S.xp;
+  document.getElementById('pxptxt').textContent = S.xp + ' XP';
+  document.getElementById('plvbar').style.width = Math.min(S.xp/3, 100) + '%';
+  document.getElementById('sstr').textContent = S.streak;
+  const used = S.profile?.free_sessions_used || 0;
+  const left = Math.max(0, FREE_LIMIT - used);
+  document.getElementById('ssess').textContent = S.profile?.is_premium ? '∞' : left;
+  updateSessBar();
+  updateChatSessInfo();
+  updateProfilePlan();
 }
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.style.display='block';
-  clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2200);
+
+function updateSessBar() {
+  const bar = document.getElementById('sessBar');
+  const txt = document.getElementById('sessBarTxt');
+  if (!bar || !txt) return;
+  if (S.profile?.is_premium) {
+    bar.className = 'sess-bar premium';
+    txt.textContent = t('sessBar_premium');
+    bar.querySelector('button').style.display = 'none';
+  } else {
+    const left = Math.max(0, FREE_LIMIT - (S.profile?.free_sessions_used||0));
+    bar.className = 'sess-bar';
+    txt.textContent = t('sessBar_free', {n: left});
+    bar.querySelector('button').style.display = '';
+  }
 }
-function completeQ(qid,xp){
-  if(S.questDone.has(qid))return;
+
+function updateChatSessInfo() {
+  const el = document.getElementById('chatSessInfo');
+  if (!el) return;
+  if (S.profile?.is_premium) {
+    el.textContent = t('chatSessInfo_premium');
+    el.style.background = 'rgba(255,209,102,.07)';
+    el.style.color = 'var(--a2)';
+  } else {
+    const left = Math.max(0, FREE_LIMIT - (S.profile?.free_sessions_used||0));
+    el.textContent = t('chatSessInfo_free', {n: left});
+    el.style.background = '';
+    el.style.color = '';
+  }
+}
+
+function updateProfilePlan() {
+  const el = document.getElementById('plan-badge');
+  if (!el) return;
+  if (S.profile?.is_premium) {
+    el.textContent = t('plan_premium');
+    el.style.background = 'rgba(255,209,102,.15)';
+    el.style.color = 'var(--a2)';
+    el.style.borderColor = 'rgba(255,209,102,.3)';
+  } else {
+    el.textContent = t('plan_free');
+    el.style.background = 'rgba(82,183,136,.12)';
+    el.style.color = 'var(--g6)';
+    el.style.borderColor = 'rgba(82,183,136,.22)';
+  }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id)?.classList.add('active');
+  const mainScreens = ['home','experts','counsel','profile','lv'];
+  document.getElementById('topbar').classList.toggle('on', mainScreens.includes(id) && id!=='counsel');
+  document.getElementById('bottomnav').classList.toggle('on', ['home','experts','counsel','profile'].includes(id));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nb-'+id)?.classList.add('active');
+  if (id==='counsel') initChat();
+  if (id==='experts') { renderExperts(); earnAch('expert_check'); completeQ('q2',30); }
+  if (id==='profile') { updateStats(); renderAchievements(); }
+}
+
+// ============================================================
+// CHAT
+// ============================================================
+function initChat() {
+  const area = document.getElementById('chatArea');
+  if (area.children.length === 0) {
+    S.history = [];
+    S.msgCount = 0;
+    appendMsg('ai', t('haru_welcome'));
+  }
+  updateChatSessInfo();
+}
+
+function appendMsg(role, text) {
+  const area = document.getElementById('chatArea');
+  const now = new Date().toLocaleTimeString(lang==='ja'?'ja-JP':'en-US', {hour:'2-digit',minute:'2-digit'});
+  const av = role==='ai' ? '🌿' : '😊';
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="mav">${av}</div><div><div class="mbub">${text.replace(/\n/g,'<br>')}</div><div class="mtime">${now}</div></div>`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function showTyping() {
+  const area = document.getElementById('chatArea');
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'typing';
+  div.innerHTML = '<div class="mav">🌿</div><div class="mbub"><div class="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>';
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+async function sendMsg() {
+  const inp = document.getElementById('chatInp');
+  const text = inp.value.trim();
+  if (!text) return;
+
+  // Check limit
+  if (!S.profile?.is_premium) {
+    const used = S.profile?.free_sessions_used || 0;
+    if (used >= FREE_LIMIT) { showPaywall(); return; }
+  }
+
+  inp.value = ''; inp.style.height = 'auto';
+  document.getElementById('sbtn').disabled = true;
+  appendMsg('user', text);
+  S.history.push({role:'user', content:text});
+  S.msgCount++;
+  addXP(10); earnAch('first_talk'); completeQ('q1',50);
+
+  // Increment DB count
+  if (!S.demoMode && SB && S.user) {
+    const newCount = (S.profile?.free_sessions_used||0) + 1;
+    await SB.from('users').update({free_sessions_used: newCount}).eq('id', S.user.id);
+    if (S.profile) S.profile.free_sessions_used = newCount;
+    updateStats();
+  } else if (S.demoMode && S.profile) {
+    S.profile.free_sessions_used = (S.profile.free_sessions_used||0) + 1;
+    updateStats();
+  }
+
+  showTyping();
+
+  try {
+    let reply;
+    if (S.demoMode || WORKER_URL === 'YOUR_WORKER_URL') {
+      await new Promise(r=>setTimeout(r, 900+Math.random()*700));
+      const demos = t('demo_replies');
+      reply = Array.isArray(demos) ? demos[Math.floor(Math.random()*demos.length)] : demos.split('\n')[0];
+    } else {
+      const sys = lang==='en' ? HARU_SYSTEM_EN : HARU_SYSTEM;
+      const res = await fetch(WORKER_URL, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:600, system:sys, messages:S.history})
+      });
+      const data = await res.json();
+      reply = data.content?.[0]?.text || (lang==='ja' ? 'もう一度話しかけてみてね。' : 'Could you try again?');
+    }
+    document.getElementById('typing')?.remove();
+    S.history.push({role:'assistant', content:reply});
+    appendMsg('ai', reply);
+  } catch(e) {
+    document.getElementById('typing')?.remove();
+    appendMsg('ai', lang==='ja' ? '接続に問題が発生しました。' : 'Connection error. Please try again.');
+  }
+
+  document.getElementById('sbtn').disabled = false;
+
+  // Show paywall after limit
+  const used2 = S.profile?.free_sessions_used || 0;
+  if (!S.profile?.is_premium && used2 >= FREE_LIMIT) {
+    setTimeout(()=>showPaywall(), 2000);
+  }
+}
+
+// ============================================================
+// EXPERTS / COUNSELORS
+// ============================================================
+function renderExperts() {
+  const list = document.getElementById('expList');
+  list.innerHTML = counselors.map(c => {
+    const name = lang==='en' ? c.nameEn : c.name;
+    const role = lang==='en' ? c.roleEn : c.role;
+    const desc = lang==='en' ? c.descEn : c.desc;
+    const tags = lang==='en' ? c.tagsEn : c.tags;
+    const bookLabel = c.avail ? t('book') : t('book_unavail');
+    return `<div class="ecard">
+      <div class="etop">
+        <div class="eav">${c.emoji}</div>
+        <div class="einfo">
+          <div class="ename">${name}</div>
+          <div class="erole">${role}</div>
+          <div class="etags">${tags.map(tg=>`<span class="etag">${tg}</span>`).join('')}</div>
+        </div>
+        <div class="eprice">${c.price}</div>
+      </div>
+      <div class="edesc">${desc}</div>
+      <div class="emeta">
+        <div class="erat">⭐ ${c.rating}（${c.reviews}件）${c.avail?'<span style="margin-left:6px;display:inline-flex;align-items:center;gap:3px;"><div class="avail"></div></span>':''}</div>
+        <button class="ebook-btn" onclick="openMatchSheet(${c.id})">${bookLabel}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// MATCH SHEET
+// ============================================================
+function openMatchSheet(id) {
+  if (!S.user) { go('auth'); return; }
+  const c = counselors.find(x=>x.id===id);
+  if (!c) return;
+  S.currentSupporterId = id;
+  document.getElementById('sheet-name').textContent = lang==='en' ? c.nameEn : c.name;
+  document.getElementById('sheet-bio').textContent = lang==='en' ? c.descEn : c.desc;
+  document.getElementById('matchSheet').classList.add('on');
+}
+
+function closeSheet() {
+  document.getElementById('matchSheet').classList.remove('on');
+  S.currentSupporterId = null;
+}
+
+async function submitMatch() {
+  const msg = document.getElementById('match-msg').value;
+  if (!S.user || !S.currentSupporterId) return;
+
+  if (!S.demoMode && SB) {
+    await SB.from('matches').insert({
+      user_id: S.user.id, supporter_id: S.currentSupporterId,
+      message: msg, status: 'pending'
+    });
+  }
+
+  closeSheet();
+  earnAch('matched');
+  addXP(20);
+  showToast(t('toast_match'));
+}
+
+// ============================================================
+// PAYWALL & STRIPE
+// ============================================================
+function showPaywall() {
+  document.getElementById('paywallMod').classList.add('on');
+}
+function closePaywall() {
+  document.getElementById('paywallMod').classList.remove('on');
+}
+
+async function startStripe() {
+  if (STRIPE_KEY === 'YOUR_STRIPE_PUBLISHABLE_KEY') {
+    showToast(t('toast_stripe')); return;
+  }
+  // Stripe checkout — implement with your Price ID
+  showToast(lang==='ja' ? '決済ページへ移動します...' : 'Redirecting to checkout...');
+  // const stripe = Stripe(STRIPE_KEY);
+  // await stripe.redirectToCheckout({lineItems:[{price:'price_xxx',quantity:1}], mode:'subscription', successUrl:window.location.href+'?success=1', cancelUrl:window.location.href});
+}
+
+// ============================================================
+// XP / QUESTS / ACHIEVEMENTS
+// ============================================================
+function addXP(n) {
+  S.xp += n;
+  updateStats();
+  showToast(t('toast_xp', {n}));
+}
+
+function completeQ(qid, xp) {
+  if (S.questDone.has(qid)) return;
   S.questDone.add(qid);
   document.getElementById(qid).classList.add('done');
-  document.getElementById('qc'+qid.slice(1)).textContent='✓';
+  document.getElementById('qc'+qid.slice(1)).textContent = '✓';
   addXP(xp);
-  if(S.questDone.size===3)earnAch('quest_all');
+  if (S.questDone.size === 3) earnAch('quest_all');
 }
-function earnAch(id){
-  if(S.achEarned.has(id))return;
+
+function earnAch(id) {
+  if (S.achEarned.has(id)) return;
   S.achEarned.add(id);
-  const a=allAch.find(x=>x.id===id);
-  if(a)showToast('🏆 実績解除：'+a.name);
+  const a = allAch.find(x=>x.id===id);
+  if (a) showToast(t('toast_ach', {n: lang==='en' ? a.nameEn : a.name}));
   renderAchievements();
 }
-function renderAchievements(){
-  const g=document.getElementById('achGrid');if(!g)return;
-  g.innerHTML=allAch.map(a=>'<div class="ac '+(S.achEarned.has(a.id)?'earned':'')+'"><span class="aci">'+a.icon+'</span><div class="acn">'+a.name+'</div></div>').join('');
+
+function renderAchievements() {
+  const g = document.getElementById('achGrid');
+  if (!g) return;
+  g.innerHTML = allAch.map(a=>`
+    <div class="ac ${S.achEarned.has(a.id)?'earned':''}">
+      <span class="aci">${a.icon}</span>
+      <div class="acn">${lang==='en' ? a.nameEn : a.name}</div>
+    </div>`).join('');
 }
-function animBars(){
-  document.querySelectorAll('.mc-fill').forEach(b=>{
-    const w=b.style.width;b.style.width='0%';setTimeout(()=>b.style.width=w,200);
-  });
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.style.display='none', 2200);
 }
-function recoverHP(field){
-  const b=document.getElementById('mb-'+field);
-  if(b){const c=parseInt(b.style.width)||0;if(c<95)b.style.width=Math.min(c+5,95)+'%';}
-}
-function renderExperts(cat){
-  const list=document.getElementById('expList');
-  const filtered=cat==='all'?experts:experts.filter(e=>e.cat===cat);
-  list.innerHTML=filtered.map(e=>'<div class="ecard"><div class="etop"><div class="eav">'+e.emoji+'</div><div class="einfo"><div class="ename">'+e.name+(e.isNew?' <span class="etag new">NEW</span>':'')+'</div><div class="erole">'+e.role+'</div><div class="etags">'+e.tags.map(t=>'<span class="etag">'+t+'</span>').join('')+'</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><span class="eprice">'+e.price+'</span>'+(e.avail?'<div class="avail"></div>':'')+'</div></div><div class="edesc">'+e.desc+'</div><div class="emeta"><div class="erat">⭐ '+e.rating+'（'+e.reviews+'件）</div><button class="ebook-btn" onclick="bookExp('+e.id+')">'+(e.avail?'予約する':'空き待ち')+'</button></div></div>').join('');
-  earnAch('expert_check');addXP(5);completeQ('q2',30);
-}
-function filterExp(cat,el){
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');renderExperts(cat);
-}
-function bookExp(id){
-  const e=experts.find(x=>x.id===id);if(!e)return;
-  if(!e.avail){showToast('現在空き待ちです');return;}
-  alert('【'+e.name+'】に相談リクエストを送りました！\n\n担当者より24時間以内にご連絡します。\n\nWellMatch事務局\nonnellisuus.life@gmail.com');
-  addXP(20);
-}
-function showPaywall(){document.getElementById('paywallMod').classList.add('on');}
-function startCounsel(field){
-  S.field=field;S.history=[];
-  go('counsel');
-  document.getElementById('ctName').textContent=fieldCfg[field].name;
-  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
-  const idx=Object.keys(fieldCfg).indexOf(field);
-  document.querySelectorAll('.ftab')[idx]?.classList.add('active');
-  document.getElementById('chatArea').innerHTML='';
-  addWelcome();
-}
-function switchField(field,el){
-  S.field=field;S.history=[];
-  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('ctName').textContent=fieldCfg[field].name;
-  document.getElementById('chatArea').innerHTML='';
-  appendMsg('ai',fieldCfg[field].name+'に切り替えたよ🌿\nどんなことでも話してみてね。');
-}
-function addWelcome(){appendMsg('ai','こんにちは！AIカウンセラーのハルだよ🌿\n\nどんな小さなことでも、遠慮なく話してね。');}
-function appendMsg(role,text){
-  const area=document.getElementById('chatArea');
-  const now=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
-  const av=role==='ai'?'🌿':'😊';
-  const div=document.createElement('div');
-  div.className='msg '+role;
-  div.innerHTML='<div class="mav">'+av+'</div><div><div class="mbub">'+text.replace(/\n/g,'<br>')+'</div><div class="mtime">'+now+'</div></div>';
-  area.appendChild(div);area.scrollTop=area.scrollHeight;
-}
-function showTyping(){
-  const area=document.getElementById('chatArea');
-  const div=document.createElement('div');
-  div.className='msg ai';div.id='typing';
-  div.innerHTML='<div class="mav">🌿</div><div class="mbub"><div class="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>';
-  area.appendChild(div);area.scrollTop=area.scrollHeight;
-}
-async function sendMsg(){
-  const inp=document.getElementById('chatInp');
-  const text=inp.value.trim();if(!text)return;
-  inp.value='';inp.style.height='auto';
-  document.getElementById('sbtn').disabled=true;
-  appendMsg('user',text);
-  S.history.push({role:'user',content:text});
-  S.msgCount++;addXP(10);earnAch('first_talk');
-  if(S.msgCount>=5&&!S.isPaid){document.getElementById('sbtn').disabled=false;showPaywall();return;}
-  completeQ('q1',50);recoverHP(S.field);showTyping();
-  if(S.demoMode){
-    await new Promise(r=>setTimeout(r,900+Math.random()*700));
-    document.getElementById('typing')?.remove();
-    const resp=demoRes[Math.floor(Math.random()*demoRes.length)];
-    appendMsg('ai',resp);S.history.push({role:'assistant',content:resp});
-  }else{
-    try{
-      const res=await fetch('https://wellmatch-api.mia-rockenry.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:fieldCfg[S.field].sys,messages:S.history})});
-      const data=await res.json();
-      document.getElementById('typing')?.remove();
-      const reply=data.content?.[0]?.text||'もう一度話しかけてみてね。';
-      appendMsg('ai',reply);S.history.push({role:'assistant',content:reply});
-    }catch{
-      document.getElementById('typing')?.remove();
-      appendMsg('ai','接続に問題が発生しました。もう一度試してみてね。');
-    }
-  }
-  document.getElementById('sbtn').disabled=false;
-  if(S.msgCount===3&&S.level===1){setTimeout(()=>{addXP(100);go('lv');},1500);}
-}
-async function startMatch(){
-  go('match');earnAch('matched');addXP(15);
-  const stages=[{st:'ANALYZING...',tt:'悩みを分析中',sb:'AIがウェルネスマップを解析しています',ico:'🔍'},{st:'MATCHING...',tt:'最適な専門家を探索中',sb:'12分野・専門家データと照合中',ico:'🔄'},{st:'FOUND!',tt:
+
+// ============================================================
+// BOOT
+// ============================================================
+window.addEventListener('load', init);
+</script>
+</body>
+</html>
