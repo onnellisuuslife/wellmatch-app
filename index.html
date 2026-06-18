@@ -63,6 +63,13 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .btn-p:active{transform:scale(.98);}
 .btn-skip{background:none;border:none;color:rgba(255,255,255,.3);font-size:12.5px;font-family:var(--sans);cursor:pointer;padding:9px;width:100%;margin-top:4px;}
 .err-msg{color:var(--a1);font-size:11px;margin-top:-8px;margin-bottom:8px;display:none;}
+.btn-google{width:100%;padding:13px;border:1.5px solid rgba(255,255,255,.15);border-radius:50px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.07);color:var(--white);display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-google:hover{background:rgba(255,255,255,.12);}
+.btn-google:active{transform:scale(.98);}
+.or-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:rgba(255,255,255,.2);font-size:11px;}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1);}
+.forgot-link{text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,.3);cursor:pointer;}
+.forgot-link span{color:var(--g6);text-decoration:underline;}
 
 /* SPLASH */
 .splash-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:calc(var(--safe-t) + 32px) 24px calc(var(--safe-b) + 24px);overflow-y:auto;}
@@ -321,6 +328,11 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
     <!-- 登録 -->
     <div class="asec active" id="a-register">
+      <button class="btn-google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+        Googleで続ける
+      </button>
+      <div class="or-divider">または</div>
       <div class="form-group">
         <label class="form-label" data-i="lbl_email">メールアドレス</label>
         <input type="email" class="inp" id="rEmail" data-placeholder-i="ph_email">
@@ -335,6 +347,11 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
     <!-- ログイン -->
     <div class="asec" id="a-login">
+      <button class="btn-google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+        Googleで続ける
+      </button>
+      <div class="or-divider">または</div>
       <div class="form-group">
         <label class="form-label" data-i="lbl_email">メールアドレス</label>
         <input type="email" class="inp" id="lEmail" data-placeholder-i="ph_email">
@@ -344,7 +361,19 @@ select.inp{appearance:none;-webkit-appearance:none;}
         <input type="password" class="inp" id="lPass" data-placeholder-i="ph_pass">
       </div>
       <button class="btn btn-p" onclick="login()" data-i="btn_login">ログイン</button>
+      <div class="forgot-link" onclick="showForgotPassword()">パスワードを忘れた方は<span>こちら</span></div>
       <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="demoLogin()" data-i="sp_demo">デモアカウントで入る</button>
+    </div>
+
+    <!-- パスワードリセット -->
+    <div class="asec" id="a-reset">
+      <p style="font-size:13px;color:var(--g6);margin-bottom:18px;line-height:1.7;">登録したメールアドレスを入力してください。パスワードリセットのリンクをお送りします。</p>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label">メールアドレス</label>
+        <input type="email" class="inp" id="resetEmail" placeholder="your@email.com">
+      </div>
+      <button class="btn btn-p" onclick="sendPasswordReset()">リセットメールを送る</button>
+      <div class="forgot-link" onclick="switchAuth('login', document.querySelectorAll('.atab')[1])">← ログインに戻る</div>
     </div>
   </div>
 </div>
@@ -470,8 +499,8 @@ select.inp{appearance:none;-webkit-appearance:none;}
 // ============================================================
 // CONFIG — ここを実際の値に置き換える
 // ============================================================
-const SUPABASE_URL = 'https://zxulocbgscnvnxdwsfkd.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4dWxvY2Jnc2Nudm54ZHdzZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzQwODAsImV4cCI6MjA5NzIxMDA4MH0.AMYtLzeYaoFz1v5it6ndEGDu7H5EQjZmtOR2QxpMgZQ';
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 const WORKER_URL = 'https://wellmatch-api.mia-rockenry.workers.dev';
 const STRIPE_KEY = 'YOUR_STRIPE_PUBLISHABLE_KEY';
 const FREE_LIMIT = 5;
@@ -638,6 +667,16 @@ async function init() {
   applyLang();
   if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
     SB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Googleログイン後のコールバック処理
+    SB.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session && !S.user) {
+        S.user = session.user;
+        await loadProfile();
+        initApp();
+      }
+    });
+
     const { data: { session } } = await SB.auth.getSession();
     if (session) {
       S.user = session.user;
@@ -679,6 +718,48 @@ function showAuthErr(msg) {
   el.textContent = msg; el.style.display = 'block';
 }
 
+async function loginWithGoogle() {
+  if (!SB) { showAuthErr('Supabase未設定です'); return; }
+  const { error } = await SB.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href }
+  });
+  if (error) showAuthErr(error.message);
+}
+
+function showForgotPassword() {
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('a-reset').classList.add('active');
+  document.getElementById('auth-global-err').style.display = 'none';
+}
+
+async function sendPasswordReset() {
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email) { showAuthErr('メールアドレスを入力してください'); return; }
+  if (!SB) { showAuthErr('Supabase未設定です'); return; }
+  const { error } = await SB.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.href + '?reset=1'
+  });
+  if (error) { showAuthErr(error.message); return; }
+  showAuthErr('');
+  document.getElementById('auth-global-err').style.display = 'block';
+  document.getElementById('auth-global-err').style.color = 'var(--g5)';
+  document.getElementById('auth-global-err').textContent = 'リセットメールを送りました！メールをご確認ください。';
+}
+
+async function sendWelcomeEmail(email) {
+  // Cloudflare WorkerかSupabase Edge Functionで送信する想定
+  // 今はコンソールログのみ（後でWorkerに実装）
+  console.log('Welcome email would be sent to:', email);
+  // 実装例：
+  // await fetch(WORKER_URL + '/welcome', {
+  //   method: 'POST',
+  //   headers: {'Content-Type':'application/json'},
+  //   body: JSON.stringify({ email, name: email.split('@')[0] })
+  // });
+}
+
 async function register() {
   const email = document.getElementById('rEmail').value.trim();
   const pass = document.getElementById('rPass').value;
@@ -691,6 +772,7 @@ async function register() {
   if (error) { showAuthErr(error.message); return; }
   S.user = data.user;
   await loadProfile();
+  await sendWelcomeEmail(email);
   initApp();
 }
 
