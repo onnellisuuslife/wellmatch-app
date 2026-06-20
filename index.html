@@ -38,7 +38,7 @@ body{font-family:var(--sans);background:var(--dark);color:var(--white);-webkit-f
 .tb-right{display:flex;align-items:center;gap:10px;}
 .xp-chip{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:50px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.18);font:500 11px/1 var(--mono);color:var(--g6);}
 .lang-btn{padding:3px 9px;border-radius:50px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.18);font:600 10px/1 var(--mono);color:var(--g6);cursor:pointer;}
-.av-sm{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--g5),var(--t1));display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1.5px solid rgba(82,183,136,.3);}
+.av-sm{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--g5),var(--t1));display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1.5px solid rgba(82,183,136,.3);overflow:hidden;}
 .bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:8px 0 calc(8px + var(--safe-b));background:rgba(5,14,9,.92);backdrop-filter:blur(24px);border-top:1px solid rgba(82,183,136,.1);display:none;justify-content:space-around;align-items:center;}
 .bottomnav.on{display:flex;}
 .nb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 14px;cursor:pointer;border:none;background:none;color:rgba(255,255,255,.28);transition:color .2s;}
@@ -56,13 +56,11 @@ body{font-family:var(--sans);background:var(--dark);color:var(--white);-webkit-f
 .inp{width:100%;padding:10px 13px;background:rgba(255,255,255,.06);border:1.5px solid rgba(82,183,136,.2);border-radius:11px;color:var(--white);font-family:var(--sans);font-size:13.5px;outline:none;transition:border-color .2s;margin-bottom:12px;}
 .inp:focus{border-color:rgba(82,183,136,.5);}
 .inp::placeholder{color:rgba(255,255,255,.22);}
-.inp.error{border-color:var(--a1);}
 select.inp{appearance:none;-webkit-appearance:none;}
 .btn{width:100%;padding:13px;border:none;border-radius:50px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
 .btn-p{background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);box-shadow:0 4px 18px rgba(82,183,136,.3);}
 .btn-p:active{transform:scale(.98);}
 .btn-skip{background:none;border:none;color:rgba(255,255,255,.3);font-size:12.5px;font-family:var(--sans);cursor:pointer;padding:9px;width:100%;margin-top:4px;}
-.err-msg{color:var(--a1);font-size:11px;margin-top:-8px;margin-bottom:8px;display:none;}
 .btn-google{width:100%;padding:13px;border:1.5px solid rgba(255,255,255,.15);border-radius:50px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.07);color:var(--white);display:flex;align-items:center;justify-content:center;gap:10px;}
 .btn-google:hover{background:rgba(255,255,255,.12);}
 .btn-google:active{transform:scale(.98);}
@@ -70,6 +68,12 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1);}
 .forgot-link{text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,.3);cursor:pointer;}
 .forgot-link span{color:var(--g6);text-decoration:underline;}
+.auth-err{color:var(--a1);font-size:12px;text-align:center;margin-bottom:10px;display:none;}
+.sess-bar{margin:0 18px 18px;padding:10px 14px;border-radius:12px;background:rgba(82,183,136,.08);border:1px solid rgba(82,183,136,.18);font-size:12px;color:var(--g6);display:flex;align-items:center;justify-content:space-between;}
+.sess-bar.premium{background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.22);color:var(--a2);}
+.price-box{background:rgba(82,183,136,.08);border:1px solid rgba(82,183,136,.2);border-radius:14px;padding:16px;margin-bottom:18px;}
+.price-big{font:700 32px/1 var(--mono);color:var(--g5);}
+.price-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;}
 
 /* SPLASH */
 .splash-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:calc(var(--safe-t) + 32px) 24px calc(var(--safe-b) + 24px);overflow-y:auto;}
@@ -98,7 +102,6 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .auth-note{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:14px;line-height:1.6;}
 .form-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);display:block;margin-bottom:5px;}
 .form-group{margin-bottom:4px;}
-.auth-err{color:var(--a1);font-size:12px;text-align:center;margin-bottom:10px;display:none;}
 
 /* HOME */
 #s-home{padding-top:56px;overflow-y:auto;}
@@ -123,19 +126,12 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .qi.done .qchk{background:var(--g5);border-color:var(--g5);color:var(--dark);}
 .qtxt{font-size:12.5px;flex:1;}
 .qxp{margin-left:auto;font:600 10.5px/1 var(--mono);color:var(--a2);}
-.match-btn-wrap{padding:0 18px;}
-.match-btn{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--g5),var(--t1));color:var(--dark);font:700 14.5px/1 var(--sans);cursor:pointer;box-shadow:0 4px 20px rgba(82,183,136,.3);transition:all .2s;}
-.match-btn:active{transform:scale(.98);}
 
-/* SESSION BAR */
-.sess-bar{margin:0 18px 18px;padding:10px 14px;border-radius:12px;background:rgba(82,183,136,.08);border:1px solid rgba(82,183,136,.18);font-size:12px;color:var(--g6);display:flex;align-items:center;justify-content:space-between;}
-.sess-bar.premium{background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.22);color:var(--a2);}
-
-/* EXPERTS / COUNSELORS */
+/* EXPERTS */
 #s-experts{padding-top:56px;overflow-y:auto;}
 .exp-scroll{padding:0 0 90px;}
 .exp-list{padding:0 18px;display:flex;flex-direction:column;gap:12px;}
-.ecard{background:rgba(27,67,50,.22);border:1px solid rgba(82,183,136,.12);border-radius:18px;padding:16px;cursor:pointer;transition:all .25s;}
+.ecard{background:rgba(27,67,50,.22);border:1px solid rgba(82,183,136,.12);border-radius:18px;padding:16px;transition:all .25s;}
 .ecard:active{transform:scale(.99);}
 .etop{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
 .eav{width:48px;height:48px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid rgba(82,183,136,.25);background:rgba(27,67,50,.4);}
@@ -164,12 +160,12 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .ondot{width:7px;height:7px;border-radius:50%;background:var(--a3);box-shadow:0 0 6px var(--a3);animation:orbPulse 2s infinite;}
 .ontxt{font-size:10.5px;color:var(--a3);}
 .chat-sess-info{font-size:10.5px;color:var(--g6);text-align:center;padding:5px 18px;background:rgba(82,183,136,.06);border-bottom:1px solid rgba(82,183,136,.1);}
-.chat-area{flex:1;min-height:0;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:11px;padding-bottom:4px;}
+.chat-area{flex:1;min-height:0;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:11px;}
 .chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:rgba(82,183,136,.2);border-radius:1px;}
 .msg{display:flex;gap:8px;animation:toastIn .3s ease both;}
 .msg.user{flex-direction:row-reverse;}
-.mav{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:rgba(82,183,136,.16);border:1px solid rgba(82,183,136,.22);}
+.mav{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:rgba(82,183,136,.16);border:1px solid rgba(82,183,136,.22);overflow:hidden;}
 .msg.user .mav{background:rgba(162,155,254,.13);border-color:rgba(162,155,254,.22);}
 .mbub{max-width:76%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.7;}
 .msg.ai .mbub{background:rgba(27,67,50,.45);border:1px solid rgba(82,183,136,.13);border-bottom-left-radius:4px;}
@@ -192,7 +188,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 #s-profile{padding-top:56px;overflow-y:auto;}
 .prof-scroll{padding:0 0 90px;}
 .phero{padding:22px 18px 18px;text-align:center;}
-.pav-lg{width:76px;height:76px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,var(--g5),var(--t1));display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid rgba(82,183,136,.35);}
+.pav-lg{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--g5),var(--t1));display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid rgba(82,183,136,.35);overflow:hidden;}
 .pname{font-family:var(--serif);font-size:22px;margin-bottom:3px;}
 .ptype{font-size:12px;color:var(--g6);margin-bottom:14px;}
 .lv-wrap{max-width:240px;margin:0 auto 18px;}
@@ -213,19 +209,13 @@ select.inp{appearance:none;-webkit-appearance:none;}
 .pmtxt{font-size:13.5px;font-weight:500;}
 .pmarr{margin-left:auto;font-size:11px;color:rgba(255,255,255,.22);}
 
-/* MATCH MODAL (Sheet) */
+/* SHEET */
 .sheet-ov{position:fixed;inset:0;z-index:200;background:rgba(5,14,9,.7);backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;}
 .sheet-ov.on{display:flex;animation:toastIn .3s ease both;}
 .sheet{background:rgba(13,43,30,.97);border:1px solid rgba(82,183,136,.2);border-radius:24px 24px 0 0;padding:20px 22px calc(20px + var(--safe-b));width:100%;max-width:480px;}
 .sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin:0 auto 18px;}
 .sheet h3{font-family:var(--serif);font-size:18px;margin-bottom:6px;}
 .sheet p{font-size:12.5px;color:var(--g6);margin-bottom:18px;line-height:1.65;}
-
-/* PAYWALL */
-#paywallMod .modal{text-align:center;}
-.price-box{background:rgba(82,183,136,.08);border:1px solid rgba(82,183,136,.2);border-radius:14px;padding:16px;margin-bottom:18px;}
-.price-big{font:700 32px/1 var(--mono);color:var(--g5);}
-.price-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;}
 
 /* LEVEL UP */
 #s-lv{align-items:center;justify-content:center;padding:40px 22px;text-align:center;}
@@ -244,7 +234,6 @@ select.inp{appearance:none;-webkit-appearance:none;}
 <div class="stars"></div>
 <div class="toast" id="toast"></div>
 
-<!-- TOP BAR -->
 <div class="topbar" id="topbar">
   <div class="tb-logo">WellMatch</div>
   <div class="tb-right">
@@ -254,7 +243,6 @@ select.inp{appearance:none;-webkit-appearance:none;}
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="bottomnav" id="bottomnav">
   <button class="nb" id="nb-home" onclick="go('home')"><span class="ni">🏠</span><span class="nl" data-i="nav_home">ホーム</span></button>
   <button class="nb" id="nb-experts" onclick="go('experts')"><span class="ni">👥</span><span class="nl" data-i="nav_experts">カウンセラー</span></button>
@@ -262,9 +250,9 @@ select.inp{appearance:none;-webkit-appearance:none;}
   <button class="nb" id="nb-profile" onclick="go('profile')"><span class="ni">👤</span><span class="nl" data-i="nav_profile">マイページ</span></button>
 </div>
 
-<!-- PAYWALL MODAL -->
+<!-- PAYWALL -->
 <div class="modal-ov" id="paywallMod">
-  <div class="modal">
+  <div class="modal" style="text-align:center;">
     <span class="m-ico">🌿</span>
     <div class="m-ttl" data-i="pw_title">無料の相談が終わったよ</div>
     <div class="m-desc" data-i="pw_desc">5回の無料相談をありがとう🌿<br>続けるにはプレミアムプランへ。</div>
@@ -326,7 +314,6 @@ select.inp{appearance:none;-webkit-appearance:none;}
     </div>
     <div id="auth-global-err" class="auth-err"></div>
 
-    <!-- 登録 -->
     <div class="asec active" id="a-register">
       <button class="btn-google" onclick="loginWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
@@ -335,17 +322,16 @@ select.inp{appearance:none;-webkit-appearance:none;}
       <div class="or-divider">または</div>
       <div class="form-group">
         <label class="form-label" data-i="lbl_email">メールアドレス</label>
-        <input type="email" class="inp" id="rEmail" data-placeholder-i="ph_email">
+        <input type="email" class="inp" id="rEmail" placeholder="your@email.com">
       </div>
       <div class="form-group" style="margin-bottom:16px;">
         <label class="form-label" data-i="lbl_pass">パスワード</label>
-        <input type="password" class="inp" id="rPass" data-placeholder-i="ph_pass">
+        <input type="password" class="inp" id="rPass" placeholder="6文字以上">
       </div>
       <button class="btn btn-p" onclick="register()" data-i="btn_register">登録して始める ✨</button>
       <p class="auth-note" data-i="auth_note">完全匿名・本名不要 / いつでも退会可能</p>
     </div>
 
-    <!-- ログイン -->
     <div class="asec" id="a-login">
       <button class="btn-google" onclick="loginWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
@@ -354,18 +340,17 @@ select.inp{appearance:none;-webkit-appearance:none;}
       <div class="or-divider">または</div>
       <div class="form-group">
         <label class="form-label" data-i="lbl_email">メールアドレス</label>
-        <input type="email" class="inp" id="lEmail" data-placeholder-i="ph_email">
+        <input type="email" class="inp" id="lEmail" placeholder="your@email.com">
       </div>
       <div class="form-group" style="margin-bottom:16px;">
         <label class="form-label" data-i="lbl_pass">パスワード</label>
-        <input type="password" class="inp" id="lPass" data-placeholder-i="ph_pass">
+        <input type="password" class="inp" id="lPass" placeholder="パスワード">
       </div>
       <button class="btn btn-p" onclick="login()" data-i="btn_login">ログイン</button>
       <div class="forgot-link" onclick="showForgotPassword()">パスワードを忘れた方は<span>こちら</span></div>
       <button class="btn" style="background:rgba(82,183,136,.1);color:var(--g5);border:1.5px solid rgba(82,183,136,.22);margin-top:9px;" onclick="demoLogin()" data-i="sp_demo">デモアカウントで入る</button>
     </div>
 
-    <!-- パスワードリセット -->
     <div class="asec" id="a-reset">
       <p style="font-size:13px;color:var(--g6);margin-bottom:18px;line-height:1.7;">登録したメールアドレスを入力してください。パスワードリセットのリンクをお送りします。</p>
       <div class="form-group" style="margin-bottom:16px;">
@@ -425,7 +410,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
   </div>
 </div>
 
-<!-- EXPERTS / COUNSELORS -->
+<!-- EXPERTS -->
 <div class="screen" id="s-experts">
   <div class="exp-scroll">
     <div style="padding:16px 18px 10px;">
@@ -436,7 +421,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
   </div>
 </div>
 
-<!-- COUNSEL / CHAT -->
+<!-- COUNSEL -->
 <div class="screen" id="s-counsel">
   <div class="counsel-wrap">
     <div class="chd">
@@ -452,7 +437,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
     <div class="chat-sess-info" id="chatSessInfo">無料相談: 残り5回</div>
     <div class="chat-area" id="chatArea"></div>
     <div class="inp-area">
-      <textarea class="cinp" id="chatInp" data-placeholder-i="chat_ph"
+      <textarea class="cinp" id="chatInp" placeholder="話したいことを入力..."
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
         oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
       <button class="sbtn" id="sbtn" onclick="sendMsg()">↑</button>
@@ -464,7 +449,11 @@ select.inp{appearance:none;-webkit-appearance:none;}
 <div class="screen" id="s-profile">
   <div class="prof-scroll">
     <div class="phero">
-      <div class="pav-lg" id="pavLg">😊</div>
+      <div style="position:relative;width:76px;margin:0 auto 12px;cursor:pointer;" onclick="document.getElementById('avatarInput').click()">
+        <div class="pav-lg" id="pavLg">😊</div>
+        <div style="position:absolute;bottom:0;right:0;width:22px;height:22px;background:var(--g5);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid var(--dark);">📷</div>
+      </div>
+      <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(this)">
       <h2 class="pname" id="pname">—</h2>
       <p class="ptype" id="ptype" data-i="user_type">ユーザー</p>
       <div class="lv-wrap">
@@ -472,6 +461,20 @@ select.inp{appearance:none;-webkit-appearance:none;}
         <div class="lv-track"><div class="lv-fill" id="plvbar" style="width:0%"></div></div>
       </div>
       <div id="plan-badge" style="display:inline-block;padding:5px 14px;border-radius:50px;font-size:11px;font-weight:700;background:rgba(82,183,136,.12);color:var(--g6);border:1px solid rgba(82,183,136,.22);">無料プラン</div>
+    </div>
+    <div style="padding:0 18px;margin-bottom:20px;">
+      <div class="qcard">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g6);margin-bottom:12px;">✏️ プロフィール編集</div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <label class="form-label">ニックネーム</label>
+          <input type="text" class="inp" id="edit-nickname" placeholder="ニックネームを入力" style="margin-bottom:0;" maxlength="20">
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <label class="form-label">一言メモ</label>
+          <textarea class="inp" id="edit-bio" placeholder="今の気持ちや自己紹介など..." rows="2" style="resize:none;margin-bottom:0;"></textarea>
+        </div>
+        <button class="btn btn-p" style="border-radius:50px;font-size:13px;padding:10px;" onclick="saveProfile()">保存する</button>
+      </div>
     </div>
     <p class="sec-lbl" data-i="ach_title">実績バッジ 🏆</p>
     <div class="ach-grid" id="achGrid"></div>
@@ -489,7 +492,7 @@ select.inp{appearance:none;-webkit-appearance:none;}
 <div class="screen" id="s-lv">
   <div class="lv-glow"><span class="lv-ico">⭐</span></div>
   <p class="lvbadge">LEVEL UP!</p>
-  <h2 class="lvtitle" id="lvtitle">レベル2達成！</h2>
+  <h2 class="lvtitle">レベル2達成！</h2>
   <p class="lvsub" data-i="lv_sub">あなたの心が少し強くなりました</p>
   <button class="btn btn-p" style="max-width:240px;margin-bottom:10px;" onclick="go('home')" data-i="lv_cont">続ける 🗺</button>
   <button class="mbtn2" onclick="go('counsel')" data-i="lv_chat">もっと話す 💬</button>
@@ -497,12 +500,13 @@ select.inp{appearance:none;-webkit-appearance:none;}
 
 <script>
 // ============================================================
-// CONFIG — ここを実際の値に置き換える
+// CONFIG
 // ============================================================
 const SUPABASE_URL = 'https://zxulocbgscnvnxdwsfkd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4dWxvY2Jnc2Nudm54ZHdzZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzQwODAsImV4cCI6MjA5NzIxMDA4MH0.AMYtLzeYaoFz1v5it6ndEGDu7H5EQjZmtOR2QxpMgZQ';
 const WORKER_URL = 'https://wellmatch-api.mia-rockenry.workers.dev';
 const STRIPE_KEY = 'pk_live_51ThmAPCQGW84zs8ORVDGHDr5vypw8YofrZu2C3CiMWd0IPehQgaOaoW7QEFRaZwUO9Ft9z9tWrkusYRx4iZXrxcd00mT4r9xvE';
+const STRIPE_PRICE_ID = 'price_1TkHh7CQGW84zs8OAnfJtKvR';
 const FREE_LIMIT = 5;
 
 // ============================================================
@@ -513,7 +517,7 @@ const T = {
     sp_tag:'尼崎のこころのサポート', sp_desc:'AIカウンセラー「ハル」がいつでも寄り添います。必要なときは、専門のカウンセラーにつなぎます。',
     sp_start:'はじめる →', sp_demo:'ログインせずに体験する', back:'戻る',
     tab_register:'新規登録', tab_login:'ログイン',
-    lbl_email:'メールアドレス', lbl_pass:'パスワード', ph_email:'your@email.com', ph_pass:'6文字以上',
+    lbl_email:'メールアドレス', lbl_pass:'パスワード',
     btn_register:'登録して始める ✨', btn_login:'ログイン',
     auth_note:'完全匿名・本名不要 / いつでも退会可能',
     nav_home:'ホーム', nav_experts:'カウンセラー', nav_counsel:'相談', nav_profile:'マイページ',
@@ -525,7 +529,7 @@ const T = {
     about_text:'WellMatchは尼崎市の皆さんのこころの悩みに寄り添うサービスです。AIカウンセラーのハルがいつでも話を聞きます。さらに専門的なサポートが必要な時は、プロのカウンセラーをご紹介します。',
     exp_title:'カウンセラー一覧', exp_sub:'尼崎で活躍する専門カウンセラー',
     haru_name:'AIカウンセラー ハル', haru_sub:'WellMatch × 尼崎', online:'オンライン',
-    chat_ph:'話したいことを入力...', chatSessInfo_free:'無料相談: 残り{n}回', chatSessInfo_premium:'⭐ プレミアム — 無制限',
+    chatSessInfo_free:'無料相談: 残り{n}回', chatSessInfo_premium:'⭐ プレミアム — 無制限',
     user_type:'ユーザー', ach_title:'実績バッジ 🏆',
     pm_counsel:'ハルに相談する', pm_experts:'カウンセラーを探す', pm_upgrade:'プレミアムにアップグレード', pm_lang:'言語 / Language', pm_logout:'ログアウト',
     pw_title:'無料の相談が終わったよ', pw_desc:'5回の無料相談をありがとう🌿\n続けるにはプレミアムプランへ。',
@@ -537,7 +541,6 @@ const T = {
     book:'相談する', book_unavail:'空き待ち',
     toast_match:'申し込みを送りました！', toast_xp:'+{n} XP ✨', toast_welcome:'ようこそ 🌿',
     toast_demo:'デモモードで体験中', toast_ach:'🏆 実績解除：{n}',
-    toast_stripe:'Stripe設定後に有効になります',
     greet_morning:'おはようございます ☀️', greet_noon:'こんにちは 🌿', greet_eve:'おつかれさまです 🌙', greet_night:'こんばんは 🌙',
     demo_replies:['そうなんだね。もう少し聞かせてくれる？','それは辛かったね。一人で抱えてたんだね。','その不安、わかるよ。同じように感じてる人、多いんだよね。','なるほど。どんなことが一番気になってる？','話してくれてありがとう。一緒に考えよう。','その状況、誰でも辛く感じると思う。'],
     haru_welcome:'こんにちは！AIカウンセラーのハルだよ🌿\n\nどんな小さなことでも、遠慮なく話してね。',
@@ -546,10 +549,10 @@ const T = {
     langLabel:'日本語',
   },
   en: {
-    sp_tag:'Mental Wellness for Amagasaki', sp_desc:'AI counselor "Haru" is always here for you.\nWe connect you with a professional when needed.',
+    sp_tag:'Mental Wellness for Amagasaki', sp_desc:'AI counselor "Haru" is always here for you. We connect you with a professional when needed.',
     sp_start:'Get started →', sp_demo:'Try without signing in', back:'Back',
     tab_register:'Sign up', tab_login:'Log in',
-    lbl_email:'Email address', lbl_pass:'Password', ph_email:'your@email.com', ph_pass:'6+ characters',
+    lbl_email:'Email address', lbl_pass:'Password',
     btn_register:'Create account ✨', btn_login:'Log in',
     auth_note:'Completely anonymous · Cancel anytime',
     nav_home:'Home', nav_experts:'Counselors', nav_counsel:'Chat', nav_profile:'Profile',
@@ -561,7 +564,7 @@ const T = {
     about_text:'WellMatch helps Amagasaki residents talk about mental wellness. Haru, our AI counselor, is always ready to listen. We connect you with professional counselors when you need deeper support.',
     exp_title:'Counselors', exp_sub:'Professional counselors in Amagasaki',
     haru_name:'AI Counselor Haru', haru_sub:'WellMatch × Amagasaki', online:'Online',
-    chat_ph:'Type anything you want to share...', chatSessInfo_free:'Free sessions: {n} left', chatSessInfo_premium:'⭐ Premium — Unlimited',
+    chatSessInfo_free:'Free sessions: {n} left', chatSessInfo_premium:'⭐ Premium — Unlimited',
     user_type:'User', ach_title:'Achievements 🏆',
     pm_counsel:'Talk to Haru', pm_experts:'Find a counselor', pm_upgrade:'Upgrade to Premium', pm_lang:'言語 / Language', pm_logout:'Log out',
     pw_title:'Free sessions used up', pw_desc:"Thanks for using WellMatch 🌿\nUpgrade to continue with Haru.",
@@ -573,9 +576,8 @@ const T = {
     book:'Book', book_unavail:'Waitlist',
     toast_match:'Request sent!', toast_xp:'+{n} XP ✨', toast_welcome:'Welcome 🌿',
     toast_demo:'Demo mode', toast_ach:'🏆 Achievement: {n}',
-    toast_stripe:'Available after Stripe setup',
     greet_morning:'Good morning ☀️', greet_noon:'Hello 🌿', greet_eve:'Good evening 🌙', greet_night:'Good night 🌙',
-    demo_replies:["I hear you. Can you tell me more?","That sounds really tough. You've been carrying this alone.","That makes sense. A lot of people feel the same way.","I understand. What's been bothering you the most?","Thanks for sharing. Let's work through this together.","Anyone would find that difficult."],
+    demo_replies:["I hear you. Can you tell me more?","That sounds really tough.","That makes sense.","I understand. What's been bothering you most?","Thanks for sharing.","Anyone would find that difficult."],
     haru_welcome:"Hi, I'm Haru 🌿\n\nFeel free to share anything on your mind. I'm here to listen.",
     err_email:'Please enter your email', err_pass:'Password must be at least 6 characters',
     err_auth:'Incorrect email or password',
@@ -593,9 +595,6 @@ function applyLang() {
     const key = el.getAttribute('data-i');
     el.textContent = t(key);
   });
-  document.querySelectorAll('[data-placeholder-i]').forEach(el => {
-    el.placeholder = t(el.getAttribute('data-placeholder-i'));
-  });
   document.getElementById('langBtn').textContent = lang==='ja' ? 'EN' : 'JP';
   document.getElementById('langCurr').textContent = t('langLabel');
   updateSessBar();
@@ -606,7 +605,7 @@ function toggleLang() { lang = lang==='ja' ? 'en' : 'ja'; applyLang(); }
 // ============================================================
 // STATE
 // ============================================================
-let SB = null; // supabase client
+let SB = null;
 let S = {
   user: null, profile: null, demoMode: false,
   xp: 0, streak: 1, msgCount: 0, history: [],
@@ -614,50 +613,32 @@ let S = {
   currentSupporterId: null,
 };
 
-const HARU_SYSTEM = `あなたはWellMatchのAIカウンセラー「ハル」です。尼崎市に住む人々のこころの悩みに寄り添います。
-フレンドリーで親しみやすい話し方（「〜だね」「〜かな」）で話します。
-まず相手の話をとことん聴いて、共感することに徹してください。
-アドバイスや提案は絶対にしないでください。相手からリクエストがあるか、5回以上会話を重ねた後に初めて軽く提案してもいいです。
-一度に一つだけ質問する。短めの返答で余白を大切に。
-「それは辛かったね」「そうなんだね」など共感の言葉を必ず入れる。
-解決しようとしない、ただ寄り添う。絵文字は🌿☀️🌸など自然系を時々使う。
-緊急の場合（自傷・自殺念慮など）は、いのちの電話（0120-783-556）を案内する。
-アドバイスや診断・医療的な発言は禁止。長文で一気に話しすぎないこと（150〜250文字程度）。`;
+const HARU_SYSTEM = `あなたはWellMatchのAIカウンセラー「ハル」です。尼崎市に住む人々のこころの悩みに寄り添います。フレンドリーで親しみやすい話し方（「〜だね」「〜かな」）で話します。まず相手の話をとことん聴いて、共感することに徹してください。アドバイスや提案は絶対にしないでください。相手からリクエストがあるか、5回以上会話を重ねた後に初めて軽く提案してもいいです。一度に一つだけ質問する。短めの返答で余白を大切に。「それは辛かったね」「そうなんだね」など共感の言葉を必ず入れる。解決しようとしない、ただ寄り添う。絵文字は🌿☀️🌸など自然系を時々使う。緊急の場合（自傷・自殺念慮など）は、いのちの電話（0120-783-556）を案内する。アドバイスや診断・医療的な発言は禁止。長文で一気に話しすぎないこと（150〜250文字程度）。`;
 
-const HARU_SYSTEM_EN = `You are "Haru", WellMatch's AI counselor. You support people in Amagasaki, Japan with their mental wellness.
-Be warm, friendly, and conversational. 
-Listen deeply first — empathize before anything else. Do NOT give advice unless the user asks for it or you've exchanged 5+ messages.
-Ask only one question at a time. Keep responses concise and leave space.
-Use natural empathetic phrases like "That sounds really hard" or "I hear you."
-Don't try to fix things — just be present. Use emojis like 🌿☀️🌸 occasionally.
-If there are signs of self-harm or crisis, provide the crisis line: Inochi no Denwa 0120-783-556.
-No medical advice or diagnoses. Keep replies to 1-3 sentences.`;
+const HARU_SYSTEM_EN = `You are "Haru", WellMatch's AI counselor for Amagasaki residents. Be warm and conversational. Listen deeply first — empathize before anything else. Do NOT give advice unless asked or after 5+ messages. Ask only one question at a time. Keep replies to 1-3 sentences. Use emojis like 🌿☀️🌸 occasionally. If crisis signs appear, provide: Inochi no Denwa 0120-783-556.`;
 
 const counselors = [
   {id:1,name:'田中 みどり',nameEn:'Midori Tanaka',role:'臨床心理士・カウンセラー',roleEn:'Clinical Psychologist',emoji:'👩‍⚕️',
    tags:['不安・緊張','うつ','人間関係'],tagsEn:['Anxiety','Depression','Relationships'],
    price:'¥5,000',desc:'尼崎市在住15年。不安・うつ・人間関係のお悩みを専門に、丁寧なカウンセリングを提供しています。',
-   descEn:'15 years in Amagasaki. Specializes in anxiety, depression, and interpersonal issues.',
-   rating:'4.9',reviews:128,avail:true},
+   descEn:'15 years in Amagasaki. Specializes in anxiety, depression, and interpersonal issues.',rating:'4.9',reviews:128,avail:true},
   {id:2,name:'佐藤 健太',nameEn:'Kenta Sato',role:'産業カウンセラー',roleEn:'Industrial Counselor',emoji:'👨‍💼',
    tags:['仕事・職場','ストレス','ハラスメント'],tagsEn:['Workplace','Stress','Harassment'],
    price:'¥4,500',desc:'職場のストレス、ハラスメント問題、キャリアの悩みなど、働くことに関する相談が得意です。',
-   descEn:'Expert in work-related stress, harassment, and career concerns.',
-   rating:'4.8',reviews:89,avail:true},
+   descEn:'Expert in work-related stress, harassment, and career concerns.',rating:'4.8',reviews:89,avail:true},
   {id:3,name:'山本 さくら',nameEn:'Sakura Yamamoto',role:'メンタルヘルスケアコーチ',roleEn:'Mental Health Coach',emoji:'👩‍👧',
    tags:['家族・夫婦','子育て','オンライン対応'],tagsEn:['Family','Parenting','Online'],
    price:'¥3,500',desc:'子育て・家族関係・夫婦間の悩みをオンラインでサポート。話しやすい雰囲気を大切にしています。',
-   descEn:'Online support for parenting, family dynamics, and relationship concerns.',
-   rating:'4.9',reviews:64,avail:true},
+   descEn:'Online support for parenting, family dynamics, and relationship concerns.',rating:'4.9',reviews:64,avail:true},
 ];
 
 const allAch = [
-  {id:'first_talk',icon:'💬',name:'はじめの一歩',nameEn:'First Step',desc:'初めて相談した'},
-  {id:'expert_check',icon:'👥',name:'専門家探し',nameEn:'Explorer',desc:'カウンセラー一覧を見た'},
-  {id:'quest_all',icon:'⚡',name:'全クエスト制覇',nameEn:'Quest Master',desc:'全クエストをクリア'},
-  {id:'premium',icon:'⭐',name:'プレミアム会員',nameEn:'Premium',desc:'プレミアムに登録した'},
-  {id:'matched',icon:'🤝',name:'マッチング申込',nameEn:'Matched',desc:'カウンセラーに申し込んだ'},
-  {id:'streak3',icon:'🔥',name:'3日連続',nameEn:'On a Roll',desc:'3日連続でログイン'},
+  {id:'first_talk',icon:'💬',name:'はじめの一歩',nameEn:'First Step'},
+  {id:'expert_check',icon:'👥',name:'専門家探し',nameEn:'Explorer'},
+  {id:'quest_all',icon:'⚡',name:'全クエスト制覇',nameEn:'Quest Master'},
+  {id:'premium',icon:'⭐',name:'プレミアム会員',nameEn:'Premium'},
+  {id:'matched',icon:'🤝',name:'マッチング申込',nameEn:'Matched'},
+  {id:'streak3',icon:'🔥',name:'3日連続',nameEn:'On a Roll'},
 ];
 
 // ============================================================
@@ -665,25 +646,20 @@ const allAch = [
 // ============================================================
 async function init() {
   applyLang();
-  if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    SB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Googleログイン後のコールバック処理
-    SB.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session && !S.user) {
-        S.user = session.user;
-        await loadProfile();
-        initApp();
-      }
-    });
-
-    const { data: { session } } = await SB.auth.getSession();
-    if (session) {
+  SB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  SB.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session && !S.user) {
       S.user = session.user;
       await loadProfile();
       initApp();
-      return;
     }
+  });
+  const { data: { session } } = await SB.auth.getSession();
+  if (session) {
+    S.user = session.user;
+    await loadProfile();
+    initApp();
+    return;
   }
   go('splash');
 }
@@ -715,11 +691,10 @@ function switchAuth(tab, el) {
 
 function showAuthErr(msg) {
   const el = document.getElementById('auth-global-err');
-  el.textContent = msg; el.style.display = 'block';
+  el.textContent = msg; el.style.display = 'block'; el.style.color = 'var(--a1)';
 }
 
 async function loginWithGoogle() {
-  if (!SB) { showAuthErr('Supabase未設定です'); return; }
   const { error } = await SB.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.href }
@@ -737,27 +712,13 @@ function showForgotPassword() {
 async function sendPasswordReset() {
   const email = document.getElementById('resetEmail').value.trim();
   if (!email) { showAuthErr('メールアドレスを入力してください'); return; }
-  if (!SB) { showAuthErr('Supabase未設定です'); return; }
   const { error } = await SB.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.href + '?reset=1'
   });
   if (error) { showAuthErr(error.message); return; }
-  showAuthErr('');
-  document.getElementById('auth-global-err').style.display = 'block';
-  document.getElementById('auth-global-err').style.color = 'var(--g5)';
-  document.getElementById('auth-global-err').textContent = 'リセットメールを送りました！メールをご確認ください。';
-}
-
-async function sendWelcomeEmail(email) {
-  // Cloudflare WorkerかSupabase Edge Functionで送信する想定
-  // 今はコンソールログのみ（後でWorkerに実装）
-  console.log('Welcome email would be sent to:', email);
-  // 実装例：
-  // await fetch(WORKER_URL + '/welcome', {
-  //   method: 'POST',
-  //   headers: {'Content-Type':'application/json'},
-  //   body: JSON.stringify({ email, name: email.split('@')[0] })
-  // });
+  const el = document.getElementById('auth-global-err');
+  el.textContent = 'リセットメールを送りました！メールをご確認ください。';
+  el.style.display = 'block'; el.style.color = 'var(--g5)';
 }
 
 async function register() {
@@ -765,14 +726,10 @@ async function register() {
   const pass = document.getElementById('rPass').value;
   if (!email) { showAuthErr(t('err_email')); return; }
   if (pass.length < 6) { showAuthErr(t('err_pass')); return; }
-  showAuthErr('');
-
-  if (!SB) { demoLogin(); return; }
   const { data, error } = await SB.auth.signUp({ email, password: pass });
   if (error) { showAuthErr(error.message); return; }
   S.user = data.user;
   await loadProfile();
-  await sendWelcomeEmail(email);
   initApp();
 }
 
@@ -781,8 +738,6 @@ async function login() {
   const pass = document.getElementById('lPass').value;
   if (!email) { showAuthErr(t('err_email')); return; }
   if (!pass) { showAuthErr(t('err_pass')); return; }
-
-  if (!SB) { demoLogin(); return; }
   const { data, error } = await SB.auth.signInWithPassword({ email, password: pass });
   if (error) { showAuthErr(t('err_auth')); return; }
   S.user = data.user;
@@ -807,7 +762,7 @@ async function logout() {
 }
 
 // ============================================================
-// APP INIT
+// APP
 // ============================================================
 function initApp() {
   updateGreeting();
@@ -816,20 +771,27 @@ function initApp() {
   renderExperts();
   go('home');
   showToast(t('toast_welcome'));
+  handleStripeReturn();
 }
 
 function updateGreeting() {
   const h = new Date().getHours();
   const greet = h<6 ? t('greet_night') : h<11 ? t('greet_morning') : h<17 ? t('greet_noon') : t('greet_eve');
   document.getElementById('hgreet').textContent = greet;
+  const nickname = S.profile?.nickname;
   const email = S.user?.email || '';
-  const name = email.split('@')[0] || 'ゲスト';
+  const name = nickname || email.split('@')[0] || 'ゲスト';
   document.getElementById('hname').textContent = name + 'さん';
   document.getElementById('pname').textContent = name;
+  if (S.profile?.avatar_url) {
+    const av = document.getElementById('topAv');
+    if (av) av.innerHTML = `<img src="${S.profile.avatar_url}" style="width:100%;height:100%;object-fit:cover;">`;
+  }
 }
 
 function updateStats() {
   document.getElementById('sxp').textContent = S.xp;
+  document.getElementById('xpV').textContent = S.xp;
   document.getElementById('pxptxt').textContent = S.xp + ' XP';
   document.getElementById('plvbar').style.width = Math.min(S.xp/3, 100) + '%';
   document.getElementById('sstr').textContent = S.streak;
@@ -877,14 +839,10 @@ function updateProfilePlan() {
   if (!el) return;
   if (S.profile?.is_premium) {
     el.textContent = t('plan_premium');
-    el.style.background = 'rgba(255,209,102,.15)';
-    el.style.color = 'var(--a2)';
-    el.style.borderColor = 'rgba(255,209,102,.3)';
+    el.style.cssText = 'display:inline-block;padding:5px 14px;border-radius:50px;font-size:11px;font-weight:700;background:rgba(255,209,102,.15);color:var(--a2);border:1px solid rgba(255,209,102,.3);';
   } else {
     el.textContent = t('plan_free');
-    el.style.background = 'rgba(82,183,136,.12)';
-    el.style.color = 'var(--g6)';
-    el.style.borderColor = 'rgba(82,183,136,.22)';
+    el.style.cssText = 'display:inline-block;padding:5px 14px;border-radius:50px;font-size:11px;font-weight:700;background:rgba(82,183,136,.12);color:var(--g6);border:1px solid rgba(82,183,136,.22);';
   }
 }
 
@@ -894,14 +852,13 @@ function updateProfilePlan() {
 function go(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s-'+id)?.classList.add('active');
-  const mainScreens = ['home','experts','counsel','profile','lv'];
-  document.getElementById('topbar').classList.toggle('on', mainScreens.includes(id) && id!=='counsel');
+  document.getElementById('topbar').classList.toggle('on', ['home','experts','profile','lv'].includes(id));
   document.getElementById('bottomnav').classList.toggle('on', ['home','experts','counsel','profile'].includes(id));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('nb-'+id)?.classList.add('active');
   if (id==='counsel') initChat();
   if (id==='experts') { renderExperts(); earnAch('expert_check'); completeQ('q2',30); }
-  if (id==='profile') { updateStats(); renderAchievements(); }
+  if (id==='profile') { updateStats(); renderAchievements(); loadProfileFields(); }
 }
 
 // ============================================================
@@ -910,8 +867,7 @@ function go(id) {
 function initChat() {
   const area = document.getElementById('chatArea');
   if (area.children.length === 0) {
-    S.history = [];
-    S.msgCount = 0;
+    S.history = []; S.msgCount = 0;
     appendMsg('ai', t('haru_welcome'));
   }
   updateChatSessInfo();
@@ -920,7 +876,7 @@ function initChat() {
 function appendMsg(role, text) {
   const area = document.getElementById('chatArea');
   const now = new Date().toLocaleTimeString(lang==='ja'?'ja-JP':'en-US', {hour:'2-digit',minute:'2-digit'});
-  const av = role==='ai' ? '🌿' : '😊';
+  const av = role==='ai' ? '🌿' : (S.profile?.avatar_url ? `<img src="${S.profile.avatar_url}" style="width:100%;height:100%;object-fit:cover;">` : '😊');
   const div = document.createElement('div');
   div.className = 'msg ' + role;
   div.innerHTML = `<div class="mav">${av}</div><div><div class="mbub">${text.replace(/\n/g,'<br>')}</div><div class="mtime">${now}</div></div>`;
@@ -941,13 +897,7 @@ async function sendMsg() {
   const inp = document.getElementById('chatInp');
   const text = inp.value.trim();
   if (!text) return;
-
-  // Check limit
-  if (!S.profile?.is_premium) {
-    const used = S.profile?.free_sessions_used || 0;
-    if (used >= FREE_LIMIT) { showPaywall(); return; }
-  }
-
+  if (!S.profile?.is_premium && (S.profile?.free_sessions_used||0) >= FREE_LIMIT) { showPaywall(); return; }
   inp.value = ''; inp.style.height = 'auto';
   document.getElementById('sbtn').disabled = true;
   appendMsg('user', text);
@@ -955,7 +905,6 @@ async function sendMsg() {
   S.msgCount++;
   addXP(10); earnAch('first_talk'); completeQ('q1',50);
 
-  // Increment DB count
   if (!S.demoMode && SB && S.user) {
     const newCount = (S.profile?.free_sessions_used||0) + 1;
     await SB.from('users').update({free_sessions_used: newCount}).eq('id', S.user.id);
@@ -967,13 +916,12 @@ async function sendMsg() {
   }
 
   showTyping();
-
   try {
     let reply;
-    if (S.demoMode || WORKER_URL === 'YOUR_WORKER_URL') {
+    if (S.demoMode) {
       await new Promise(r=>setTimeout(r, 900+Math.random()*700));
       const demos = t('demo_replies');
-      reply = Array.isArray(demos) ? demos[Math.floor(Math.random()*demos.length)] : demos.split('\n')[0];
+      reply = Array.isArray(demos) ? demos[Math.floor(Math.random()*demos.length)] : demos[0];
     } else {
       const sys = lang==='en' ? HARU_SYSTEM_EN : HARU_SYSTEM;
       const res = await fetch(WORKER_URL, {
@@ -990,18 +938,14 @@ async function sendMsg() {
     document.getElementById('typing')?.remove();
     appendMsg('ai', lang==='ja' ? '接続に問題が発生しました。' : 'Connection error. Please try again.');
   }
-
   document.getElementById('sbtn').disabled = false;
-
-  // Show paywall after limit
-  const used2 = S.profile?.free_sessions_used || 0;
-  if (!S.profile?.is_premium && used2 >= FREE_LIMIT) {
+  if (!S.profile?.is_premium && (S.profile?.free_sessions_used||0) >= FREE_LIMIT) {
     setTimeout(()=>showPaywall(), 2000);
   }
 }
 
 // ============================================================
-// EXPERTS / COUNSELORS
+// EXPERTS
 // ============================================================
 function renderExperts() {
   const list = document.getElementById('expList');
@@ -1010,7 +954,6 @@ function renderExperts() {
     const role = lang==='en' ? c.roleEn : c.role;
     const desc = lang==='en' ? c.descEn : c.desc;
     const tags = lang==='en' ? c.tagsEn : c.tags;
-    const bookLabel = c.avail ? t('book') : t('book_unavail');
     return `<div class="ecard">
       <div class="etop">
         <div class="eav">${c.emoji}</div>
@@ -1024,7 +967,7 @@ function renderExperts() {
       <div class="edesc">${desc}</div>
       <div class="emeta">
         <div class="erat">⭐ ${c.rating}（${c.reviews}件）${c.avail?'<span style="margin-left:6px;display:inline-flex;align-items:center;gap:3px;"><div class="avail"></div></span>':''}</div>
-        <button class="ebook-btn" onclick="openMatchSheet(${c.id})">${bookLabel}</button>
+        <button class="ebook-btn" onclick="openMatchSheet(${c.id})">${c.avail ? t('book') : t('book_unavail')}</button>
       </div>
     </div>`;
   }).join('');
@@ -1051,14 +994,12 @@ function closeSheet() {
 async function submitMatch() {
   const msg = document.getElementById('match-msg').value;
   if (!S.user || !S.currentSupporterId) return;
-
   if (!S.demoMode && SB) {
     await SB.from('matches').insert({
       user_id: S.user.id, supporter_id: S.currentSupporterId,
       message: msg, status: 'pending'
     });
   }
-
   closeSheet();
   earnAch('matched');
   addXP(20);
@@ -1068,21 +1009,98 @@ async function submitMatch() {
 // ============================================================
 // PAYWALL & STRIPE
 // ============================================================
-function showPaywall() {
-  document.getElementById('paywallMod').classList.add('on');
-}
-function closePaywall() {
-  document.getElementById('paywallMod').classList.remove('on');
-}
+function showPaywall() { document.getElementById('paywallMod').classList.add('on'); }
+function closePaywall() { document.getElementById('paywallMod').classList.remove('on'); }
 
 async function startStripe() {
-  if (STRIPE_KEY === 'YOUR_STRIPE_PUBLISHABLE_KEY') {
-    showToast(t('toast_stripe')); return;
+  const btn = document.getElementById('stripeBtn');
+  btn.disabled = true;
+  btn.textContent = lang==='ja' ? '処理中...' : 'Processing...';
+  try {
+    const stripe = Stripe(STRIPE_KEY);
+    await stripe.redirectToCheckout({
+      lineItems: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
+      mode: 'subscription',
+      successUrl: window.location.origin + window.location.pathname + '?premium=1',
+      cancelUrl: window.location.origin + window.location.pathname + '?cancelled=1',
+      customerEmail: S.user?.email || undefined,
+    });
+  } catch(e) {
+    showToast('決済エラー: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = t('pw_cta');
   }
-  // Stripe checkout — implement with your Price ID
-  showToast(lang==='ja' ? '決済ページへ移動します...' : 'Redirecting to checkout...');
-  // const stripe = Stripe(STRIPE_KEY);
-  // await stripe.redirectToCheckout({lineItems:[{price:'price_xxx',quantity:1}], mode:'subscription', successUrl:window.location.href+'?success=1', cancelUrl:window.location.href});
+}
+
+async function handleStripeReturn() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('premium') === '1') {
+    if (SB && S.user) {
+      await SB.from('users').update({ is_premium: true }).eq('id', S.user.id);
+      if (S.profile) S.profile.is_premium = true;
+      updateStats();
+      earnAch('premium');
+    }
+    showToast('🎉 プレミアム会員になりました！');
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+}
+
+// ============================================================
+// PROFILE EDIT & AVATAR
+// ============================================================
+async function uploadAvatar(input) {
+  const file = input.files[0];
+  if (!file || !S.user) return;
+  if (file.size > 2 * 1024 * 1024) { showToast('2MB以下の画像を選んでください'); return; }
+  showToast('アップロード中...');
+  if (S.demoMode) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const av = document.getElementById('pavLg');
+      av.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      document.getElementById('topAv').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
+    showToast('写真を更新しました！');
+    return;
+  }
+  const ext = file.name.split('.').pop();
+  const path = `${S.user.id}/avatar.${ext}`;
+  const { error } = await SB.storage.from('avatars').upload(path, file, { upsert: true });
+  if (error) { showToast('アップロードに失敗しました'); return; }
+  const { data } = SB.storage.from('avatars').getPublicUrl(path);
+  const avatarUrl = data.publicUrl + '?t=' + Date.now();
+  await SB.from('users').update({ avatar_url: avatarUrl }).eq('id', S.user.id);
+  if (S.profile) S.profile.avatar_url = avatarUrl;
+  document.getElementById('pavLg').innerHTML = `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  document.getElementById('topAv').innerHTML = `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+  showToast('写真を更新しました！ 🌿');
+}
+
+async function saveProfile() {
+  const nickname = document.getElementById('edit-nickname').value.trim();
+  const bio = document.getElementById('edit-bio').value.trim();
+  if (!S.demoMode && SB && S.user) {
+    await SB.from('users').update({ nickname, bio }).eq('id', S.user.id);
+    if (S.profile) { S.profile.nickname = nickname; S.profile.bio = bio; }
+  }
+  if (nickname) {
+    document.getElementById('pname').textContent = nickname;
+    document.getElementById('hname').textContent = nickname + 'さん';
+  }
+  showToast('プロフィールを保存しました！ 🌿');
+}
+
+function loadProfileFields() {
+  if (!S.profile) return;
+  const nicknameEl = document.getElementById('edit-nickname');
+  const bioEl = document.getElementById('edit-bio');
+  if (nicknameEl && S.profile.nickname) nicknameEl.value = S.profile.nickname;
+  if (bioEl && S.profile.bio) bioEl.value = S.profile.bio;
+  if (S.profile.avatar_url) {
+    document.getElementById('pavLg').innerHTML = `<img src="${S.profile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  }
 }
 
 // ============================================================
@@ -1125,10 +1143,10 @@ function renderAchievements() {
 // TOAST
 // ============================================================
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  clearTimeout(t._t);
-  t._t = setTimeout(()=>t.style.display='none', 2200);
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.style.display='none', 2200);
 }
 
 // ============================================================
